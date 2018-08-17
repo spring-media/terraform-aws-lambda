@@ -17,7 +17,7 @@ with event source mapping:
 
 ```
 module "stream-lambda" {
-  source                  = "git@github.com:spring-media/terraform-aws-lambda.git"
+  source                  = "github.com/spring-media/terraform-aws-lambda"
   name                    = "stream-lambda"
   function_name           = "my-dynamodb-stream-function"
   handler                 = "my-handler"
@@ -32,7 +32,7 @@ with scheduled event:
 
 ```
 module "scheduled-lambda" {
-  source              = "git@github.com:spring-media/terraform-aws-lambda.git"
+  source              = "github.com/spring-media/terraform-aws-lambda"
   name                = "scheduled-lambda"
   function_name       = "my-scheduled-function"
   handler             = "my-handler"
