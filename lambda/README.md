@@ -1,4 +1,4 @@
-# AWS Lambda Terraform module [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# AWS Lambda Terraform module
 
 Terraform module which creates Lambda resources on AWS.
 
@@ -69,8 +69,3 @@ module "scheduled-lambda" {
 | arn | The Amazon Resource Name (ARN) identifying your Lambda Function. |
 | function_name | The unique name of your Lambda Function. |
 | invoke_arn | The ARN to be used for invoking Lambda Function from API Gateway - to be used in aws_api_gateway_integration's uri |
-
-
-## License
-
-MIT Licensed. See LICENSE for full details.
