@@ -35,7 +35,8 @@ variable "memory_size" {
 }
 
 variable "handler" {
-  description = "The function entrypoint in your code."
+  description = "The function entrypoint in your code. Defaults to the name var of this module."
+  default     = ""
 }
 
 variable "schedule_expression" {
