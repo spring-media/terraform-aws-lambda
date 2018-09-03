@@ -68,3 +68,13 @@ variable "stream_starting_position" {
   description = "The position in the stream where AWS Lambda should start reading. Must be one of either TRIM_HORIZON or LATEST. Defaults to TRIM_HORIZON."
   default     = "TRIM_HORIZON"
 }
+
+variable "ssm_parameter_names" {
+  description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key needs to be provided as well."
+  default     = []
+}
+
+variable "kms_key" {
+  description = "KMS key to decrypt AWS Systems Manager parameters."
+  default     = ""
+}
