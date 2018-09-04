@@ -10,6 +10,9 @@ resource "aws_lambda_function" "lambda" {
   memory_size   = "${var.memory_size}"
 }
 
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
 data "aws_iam_policy_document" "assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -113,4 +116,56 @@ resource "aws_iam_role_policy_attachment" "stream_policy_attachment" {
   count      = "${var.stream_enabled}"
   role       = "${aws_iam_role.lambda.name}"
   policy_arn = "${aws_iam_policy.stream_policy.arn}"
+}
+
+data "aws_iam_policy_document" "ssm_policy_document" {
+  count = "${length(var.ssm_parameter_names)}"
+
+  statement {
+    actions = [
+      "ssm:GetParameters",
+    ]
+
+    resources = [
+      "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/${element(var.ssm_parameter_names, count.index)}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "ssm_policy" {
+  count       = "${length(var.ssm_parameter_names)}"
+  name        = "${var.function_name}-ssm-${count.index}"
+  description = "Provides minimum Parameter Store permissions for ${var.function_name}."
+  policy      = "${data.aws_iam_policy_document.ssm_policy_document.*.json[count.index]}"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_policy_attachment" {
+  count      = "${length(var.ssm_parameter_names)}"
+  role       = "${aws_iam_role.lambda.name}"
+  policy_arn = "${aws_iam_policy.ssm_policy.*.arn[count.index]}"
+}
+
+data "aws_iam_policy_document" "kms_policy_document" {
+  statement {
+    actions = [
+      "kms:Decrypt",
+    ]
+
+    resources = [
+      "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/${var.kms_key}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "kms_policy" {
+  count       = "${var.kms_key != "" ? 1 : 0}"
+  name        = "${var.function_name}-kms"
+  description = "Provides minimum KMS permissions for ${var.function_name}."
+  policy      = "${data.aws_iam_policy_document.kms_policy_document.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
+  count      = "${var.kms_key != "" ? 1 : 0}"
+  role       = "${aws_iam_role.lambda.name}"
+  policy_arn = "${aws_iam_policy.kms_policy.arn}"
 }

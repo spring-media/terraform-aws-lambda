@@ -9,36 +9,41 @@ These types of resources are supported:
 These events are supported:
 
 * Stream events using [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html) (currently only DynamoDb)
-* Scheduled events using [CloudWatch](https://www.terraform.io/docs/providers/aws/r/cloudwatch_event_rule.html) 
+* Scheduled events using [CloudWatch](https://www.terraform.io/docs/providers/aws/r/cloudwatch_event_rule.html)
+
+Furthermore this module supports:
+
+* reading configuration and secrets from [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html) including decryption of [SecureString](https://docs.aws.amazon.com/kms/latest/developerguide/services-parameter-store.html) parameters
+* [CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html) Log group configuration (e.g. retention time)
 
 ## Usage
 
 with event source mapping:
 
 ```
-module "stream-lambda" {
-  source                  = "github.com/spring-media/terraform-aws-lambda"
-  name                    = "stream-lambda"
-  function_name           = "my-dynamodb-stream-function"
-  handler                 = "my-handler"
-  s3_bucket               = "some-s3-bucket"
-  s3_key                  = "some-s3-key"
-  stream_enabled          = true
-  stream_event_source_arn = "arn:aws:dynamodb:REGION:123456789012:stream/stream_name"
+module "lambda" {
+  source              = "github.com/spring-media/terraform-aws//lambda"
+  name                = "scheduled"
+  function_name       = "lambda-blueprint-scheduled-fct"
+  s3_bucket           = "${var.s3_bucket}"
+  s3_key              = "${var.version}/scheduled.zip"
+  schedule_expression = "rate(1 minute)"
 }
 ```
 
-with scheduled event:
+with ssm support:
 
 ```
-module "scheduled-lambda" {
-  source              = "github.com/spring-media/terraform-aws-lambda"
-  name                = "scheduled-lambda"
-  function_name       = "my-scheduled-function"
-  handler             = "my-handler"
-  s3_bucket           = "some-s3-bucket"
-  s3_key              = "some-s3-key"
+module "lambda" {
+  source              = "github.com/spring-media/terraform-aws//lambda"
+  name                = "scheduled"
+  function_name       = "lambda-blueprint-scheduled-fct"
+  s3_bucket           = "${var.s3_bucket}"
+  s3_key              = "${var.version}/scheduled.zip"
   schedule_expression = "rate(1 minute)"
+
+  ssm_parameter_names = ["some/nested/param", "some/other/nested/param/*"]
+  kms_key             = "12345abc-123-12d3-1234-12345678"
 }
 ```
 
@@ -49,6 +54,7 @@ module "scheduled-lambda" {
 | description | Description of what your Lambda Function does. | string | `` | no |
 | function_name | A unique name for your Lambda Function. | string | - | yes |
 | handler | The function entrypoint in your code. Defaults to the name var of this module. | string | `` | no |
+| kms_key | KMS key to decrypt AWS Systems Manager parameters. | string | `` | no |
 | log_retention_in_days | Specifies the number of days you want to retain log events in the specified log group. Defaults to 14. | string | `14` | no |
 | memory_size | Amount of memory in MB your Lambda Function can use at runtime. Defaults to 128. | string | `128` | no |
 | name | A unique name for this Lambda module. | string | - | yes |
@@ -56,6 +62,7 @@ module "scheduled-lambda" {
 | s3_bucket | The S3 bucket location containing the function's deployment package. This bucket must reside in the same AWS region where you are creating the Lambda function. | string | - | yes |
 | s3_key | The S3 key of an object containing the function's deployment package. | string | - | yes |
 | schedule_expression | An optional scheduling expression for triggering the Lambda Function using CloudWatch events. For example, cron(0 20 * * ? *) or rate(5 minutes). | string | `` | no |
+| ssm_parameter_names | List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key needs to be provided as well. | string | `<list>` | no |
 | stream_batch_size | The largest number of records that Lambda will retrieve from your event source at the time of invocation. Defaults to 100. | string | `100` | no |
 | stream_enabled | This enables creation of a stream event source mapping for the Lambda function. Defaults to false. | string | `false` | no |
 | stream_event_source_arn | An optional event source ARN - can either be a Kinesis or DynamoDB stream. | string | `` | no |
