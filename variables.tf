@@ -78,3 +78,9 @@ variable "kms_key" {
   description = "KMS key to decrypt AWS Systems Manager parameters."
   default     = ""
 }
+
+variable "tags" {
+  description = "A mapping of tags to assign to the Lambda function."
+  type        = "map"
+  default     = {}
+}

@@ -8,6 +8,7 @@ resource "aws_lambda_function" "lambda" {
   handler       = "${var.handler != "" ? var.handler : var.name}"
   timeout       = "${var.timeout}"
   memory_size   = "${var.memory_size}"
+  tags          = "${var.tags}"
 }
 
 data "aws_region" "current" {}
