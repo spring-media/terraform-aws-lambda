@@ -67,6 +67,7 @@ module "lambda" {
 | stream_enabled | This enables creation of a stream event source mapping for the Lambda function. Defaults to false. | string | `false` | no |
 | stream_event_source_arn | An optional event source ARN - can either be a Kinesis or DynamoDB stream. | string | `` | no |
 | stream_starting_position | The position in the stream where AWS Lambda should start reading. Must be one of either TRIM_HORIZON or LATEST. Defaults to TRIM_HORIZON. | string | `TRIM_HORIZON` | no |
+| tags | A mapping of tags to assign to the Lambda function. | map | `<map>` | no |
 | timeout | The amount of time your Lambda Function has to run in seconds. Defaults to 3. | string | `3` | no |
 
 ## Outputs
