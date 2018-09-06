@@ -34,6 +34,10 @@ module "lambda" {
 with ssm support:
 
 ```
+data "aws_kms_key" "kms" {
+  key_id = "alias/my_key"
+}
+
 module "lambda" {
   source              = "github.com/spring-media/terraform-aws-lambda"
   name                = "scheduled"
@@ -43,7 +47,7 @@ module "lambda" {
   schedule_expression = "rate(1 minute)"
 
   ssm_parameter_names = ["some/nested/param", "some/other/nested/param/*"]
-  kms_key             = "12345abc-123-12d3-1234-12345678"
+  kms_key_arn         = "${data.aws_kms_key.kms.arn}"
 }
 ```
 
