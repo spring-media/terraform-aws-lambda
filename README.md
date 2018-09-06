@@ -54,7 +54,7 @@ module "lambda" {
 | description | Description of what your Lambda Function does. | string | `` | no |
 | function_name | A unique name for your Lambda Function. | string | - | yes |
 | handler | The function entrypoint in your code. Defaults to the name var of this module. | string | `` | no |
-| kms_key | KMS key to decrypt AWS Systems Manager parameters. | string | `` | no |
+| kms_key_arn | The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters. | string | `` | no |
 | log_retention_in_days | Specifies the number of days you want to retain log events in the specified log group. Defaults to 14. | string | `14` | no |
 | memory_size | Amount of memory in MB your Lambda Function can use at runtime. Defaults to 128. | string | `128` | no |
 | name | A unique name for this Lambda module. | string | - | yes |

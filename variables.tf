@@ -70,12 +70,12 @@ variable "stream_starting_position" {
 }
 
 variable "ssm_parameter_names" {
-  description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key needs to be provided as well."
+  description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well."
   default     = []
 }
 
-variable "kms_key" {
-  description = "KMS key to decrypt AWS Systems Manager parameters."
+variable "kms_key_arn" {
+  description = "The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters."
   default     = ""
 }
 

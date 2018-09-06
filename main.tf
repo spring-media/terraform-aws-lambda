@@ -153,20 +153,20 @@ data "aws_iam_policy_document" "kms_policy_document" {
     ]
 
     resources = [
-      "arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/${var.kms_key}",
+      "${var.kms_key_arn}",
     ]
   }
 }
 
 resource "aws_iam_policy" "kms_policy" {
-  count       = "${var.kms_key != "" ? 1 : 0}"
+  count       = "${var.kms_key_arn != "" ? 1 : 0}"
   name        = "${var.function_name}-kms"
   description = "Provides minimum KMS permissions for ${var.function_name}."
   policy      = "${data.aws_iam_policy_document.kms_policy_document.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
-  count      = "${var.kms_key != "" ? 1 : 0}"
+  count      = "${var.kms_key_arn != "" ? 1 : 0}"
   role       = "${aws_iam_role.lambda.name}"
   policy_arn = "${aws_iam_policy.kms_policy.arn}"
 }
