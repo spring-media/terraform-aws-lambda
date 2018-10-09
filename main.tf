@@ -60,6 +60,23 @@ resource "aws_cloudwatch_log_group" "lambda" {
   retention_in_days = "${var.log_retention_in_days}"
 }
 
+resource "aws_lambda_permission" "cloudwatch_logs" {
+  count         = "${var.logfilter_destination_arn != "" ? 1 : 0}"
+  action        = "lambda:InvokeFunction"
+  function_name = "${var.logfilter_destination_arn}"
+  principal     = "logs.${data.aws_region.current.name}.amazonaws.com"
+  source_arn    = "${aws_cloudwatch_log_group.lambda.arn}"
+}
+
+resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_logs_to_es" {
+  depends_on      = ["aws_lambda_permission.cloudwatch_logs"]
+  count           = "${var.logfilter_destination_arn != "" ? 1 : 0}"
+  name            = "elasticsearch-stream-filter"
+  log_group_name  = "${aws_cloudwatch_log_group.lambda.name}"
+  filter_pattern  = ""
+  destination_arn = "${var.logfilter_destination_arn}"
+}
+
 resource "aws_lambda_permission" "cloudwatch" {
   count         = "${var.schedule_expression != "" ? 1 : 0}"
   statement_id  = "AllowExecutionFromCloudWatch"
