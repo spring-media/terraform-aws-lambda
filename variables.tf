@@ -49,6 +49,11 @@ variable "log_retention_in_days" {
   default     = 14
 }
 
+variable "logfilter_destination_arn" {
+  description = "The ARN of the destination to deliver matching log events to. Kinesis stream or Lambda function ARN."
+  default     = ""
+}
+
 variable "stream_batch_size" {
   description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation. Defaults to 100."
   default     = 100
