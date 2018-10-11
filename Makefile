@@ -21,17 +21,6 @@ validate: ## Validates the Terraform files
 	-var s3_bucket=bucket \
 	-var s3_key=key
 
-.PHONY: bump-version
-BUMP := patch
-bump-version: ## Bump the version in the version file. Set BUMP to [ patch | major | minor ]
-	@GO111MODULE=off go get -u github.com/jessfraz/junk/sembump # update sembump tool
-	$(eval NEW_VERSION = $(shell sembump --kind $(BUMP) $(VERSION)))
-	@echo "Bumping VERSION.txt from $(VERSION) to $(NEW_VERSION)"
-	echo $(NEW_VERSION) > VERSION.txt
-	git add VERSION.txt
-	git commit -vsam "Bump version to $(NEW_VERSION)"
-	@echo "Run make tag to create and push the tag for new version $(NEW_VERSION)"
-
 .PHONY: tag
 tag: ## Create a new git tag to prepare to build a release
 	git tag -a $(VERSION) -m "$(VERSION)"
