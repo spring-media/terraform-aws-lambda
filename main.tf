@@ -25,6 +25,14 @@ data "aws_iam_policy_document" "assume_role_policy" {
   }
 }
 
+module "cloudwatch-event" {
+  enable = "${lookup(var.trigger, "type", "") == "cloudwatch-event" ? 1 : 0}"
+  source = "./modules/trigger/cloudwatch-event"
+
+  lambda_function_arn = "${aws_lambda_function.lambda.arn}"
+  schedule_expression = "${lookup(var.trigger, "schedule_expression", "")}"
+}
+
 resource "aws_iam_role" "lambda" {
   name = "${var.function_name}-role"
 
@@ -75,28 +83,6 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_logs_to_es" {
   log_group_name  = "${aws_cloudwatch_log_group.lambda.name}"
   filter_pattern  = ""
   destination_arn = "${var.logfilter_destination_arn}"
-}
-
-resource "aws_lambda_permission" "cloudwatch" {
-  count         = "${var.schedule_expression != "" ? 1 : 0}"
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.lambda.arn}"
-  principal     = "events.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_event_rule.lambda.arn}"
-}
-
-resource "aws_cloudwatch_event_rule" "lambda" {
-  count               = "${var.schedule_expression != "" ? 1 : 0}"
-  name                = "${var.function_name}"
-  schedule_expression = "${var.schedule_expression}"
-}
-
-resource "aws_cloudwatch_event_target" "lambda" {
-  count     = "${var.schedule_expression != "" ? 1 : 0}"
-  target_id = "${var.function_name}"
-  rule      = "${aws_cloudwatch_event_rule.lambda.name}"
-  arn       = "${aws_lambda_function.lambda.arn}"
 }
 
 resource "aws_lambda_event_source_mapping" "stream_source" {

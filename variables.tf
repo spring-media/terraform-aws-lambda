@@ -58,11 +58,6 @@ variable "runtime" {
   default     = "go1.x"
 }
 
-variable "schedule_expression" {
-  description = "An optional scheduling expression for triggering the Lambda Function using CloudWatch events. For example, cron(0 20 * * ? *) or rate(5 minutes)."
-  default     = ""
-}
-
 variable "ssm_parameter_names" {
   description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well."
   default     = []
@@ -97,4 +92,10 @@ variable "tags" {
 variable "timeout" {
   description = "The amount of time your Lambda Function has to run in seconds. Defaults to 3."
   default     = 3
+}
+
+variable "trigger" {
+  description = "The object describing the source of events which trigger the function."
+  type        = "map"
+  default     = {}
 }
