@@ -1,3 +1,6 @@
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
 resource "aws_lambda_event_source_mapping" "stream_source" {
   count             = "${var.enable}"
   event_source_arn  = "${var.stream_event_source_arn}"
@@ -14,9 +17,8 @@ data "aws_iam_policy_document" "stream_policy_document" {
       "dynamodb:ListStreams",
     ]
 
-    // TODO: restrict on specific table/region/account?
     resources = [
-      "arn:aws:dynamodb:*:*:*",
+      "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${var.table_name}/stream/*",
     ]
   }
 }

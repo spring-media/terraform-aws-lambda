@@ -37,6 +37,7 @@ module "event-dynamodb" {
   function_name           = "${aws_lambda_function.lambda.function_name}"
   iam_role_name           = "${aws_iam_role.lambda.name}"
   stream_event_source_arn = "${lookup(var.event, "stream_event_source_arn", "")}"
+  table_name              = "${lookup(var.event, "table_name", "")}"
 }
 
 resource "aws_iam_role" "lambda" {

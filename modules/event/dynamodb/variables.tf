@@ -22,3 +22,8 @@ variable "stream_starting_position" {
   description = "The position in the stream where AWS Lambda should start reading. Must be one of either TRIM_HORIZON or LATEST. Defaults to TRIM_HORIZON."
   default     = "TRIM_HORIZON"
 }
+
+variable "table_name" {
+  description = "The name of the DynamoDb table providing the stream."
+  default     = ""
+}
