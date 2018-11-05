@@ -28,6 +28,12 @@ variable "description" {
   default     = ""
 }
 
+variable "event" {
+  description = "Event source configuration which triggers the Lambda function. Supported events: Scheduled Events, DynamoDb."
+  type        = "map"
+  default     = {}
+}
+
 variable "kms_key_arn" {
   description = "The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters."
   default     = ""
@@ -67,10 +73,4 @@ variable "tags" {
 variable "timeout" {
   description = "The amount of time your Lambda Function has to run in seconds. Defaults to 3."
   default     = 3
-}
-
-variable "event" {
-  description = "Event source configuration which triggers the Lambda function. See https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html for supported event sources."
-  type        = "map"
-  default     = {}
 }
