@@ -44,6 +44,7 @@ module "lambda" {
   event {
     type                             = "dynamodb"
     schedule_stream_event_source_arn = "arn:..."
+    table_name                       = "my-table"
   }
 }
 ```
