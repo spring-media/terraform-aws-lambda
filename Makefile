@@ -18,6 +18,7 @@ validate: ## Validates the Terraform files
 	@AWS_REGION=eu-west-1 terraform validate \
 	-var name=test \
 	-var function_name=test_function \
+	-var handler=handler \
 	-var s3_bucket=bucket \
 	-var s3_key=key
 

@@ -19,7 +19,7 @@ with CloudWatch event source:
 ```
 module "lambda" {
   source        = "github.com/spring-media/terraform-aws-lambda"
-  name          = "scheduled"
+  handler       = "scheduled"
   function_name = "lambda-blueprint-scheduled-fct"
   s3_bucket     = "${var.s3_bucket}"
   s3_key        = "${var.version}/scheduled.zip"
@@ -36,7 +36,7 @@ with DynamoDb stream event source:
 ```
 module "lambda" {
   source        = "github.com/spring-media/terraform-aws-lambda"
-  name          = "stream"
+  handler       = "stream"
   function_name = "lambda-blueprint-stream-fct"
   s3_bucket     = "${var.s3_bucket}"
   s3_key        = "${var.version}/stream.zip"
@@ -57,7 +57,7 @@ data "aws_kms_key" "kms" {
 
 module "lambda" {
   source        = "github.com/spring-media/terraform-aws-lambda"
-  name          = "scheduled"
+  handler       = "scheduled"
   function_name = "lambda-blueprint-scheduled-fct"
   s3_bucket     = "${var.s3_bucket}"
   s3_key        = "${var.version}/scheduled.zip"
@@ -81,7 +81,7 @@ data "aws_lambda_function" "logging_lambda" {
 
 module "lambda" {
   source        = "github.com/spring-media/terraform-aws-lambda"
-  name          = "scheduled"
+  handler       = "scheduled"
   function_name = "lambda-blueprint-scheduled-fct"
   s3_bucket     = "${var.s3_bucket}"
   s3_key        = "${var.version}/scheduled.zip"
@@ -104,12 +104,11 @@ module "lambda" {
 | description | Description of what your Lambda Function does. | string | `` | no |
 | event | Event source configuration which triggers the Lambda function. See https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html for supported event sources. | map | `<map>` | no |
 | function_name | A unique name for your Lambda Function. | string | - | yes |
-| handler | The function entrypoint in your code. Defaults to the name var of this module. | string | `` | no |
+| handler | The function entrypoint in your code. | string | - | yes |
 | kms_key_arn | The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters. | string | `` | no |
 | log_retention_in_days | Specifies the number of days you want to retain log events in the specified log group. Defaults to 14. | string | `14` | no |
 | logfilter_destination_arn | The ARN of the destination to deliver matching log events to. Kinesis stream or Lambda function ARN. | string | `` | no |
 | memory_size | Amount of memory in MB your Lambda Function can use at runtime. Defaults to 128. | string | `128` | no |
-| name | A unique name for this Lambda module. | string | - | yes |
 | runtime | The runtime environment for the Lambda function you are uploading. Defaults to go1.x | string | `go1.x` | no |
 | s3_bucket | The S3 bucket location containing the function's deployment package. This bucket must reside in the same AWS region where you are creating the Lambda function. | string | - | yes |
 | s3_key | The S3 key of an object containing the function's deployment package. | string | - | yes |
@@ -124,3 +123,4 @@ module "lambda" {
 | arn | The Amazon Resource Name (ARN) identifying your Lambda Function. |
 | function_name | The unique name of your Lambda Function. |
 | invoke_arn | The ARN to be used for invoking Lambda Function from API Gateway - to be used in aws_api_gateway_integration's uri |
+
