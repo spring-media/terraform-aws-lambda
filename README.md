@@ -1,14 +1,10 @@
 # AWS Lambda Terraform module [![Build Status](https://travis-ci.com/spring-media/terraform-aws-lambda.svg?branch=master)](https://travis-ci.com/spring-media/terraform-aws-lambda) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Terraform module which creates Lambda resources on AWS.
+Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources.
 
-These types of resources are supported:
+These [event sources](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html) are supported:
 
-* [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html)
-
-These events are supported:
-
-* Stream events using [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html) (currently only DynamoDb)
+* DynamoDb stream events using [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html)
 * Scheduled events using [CloudWatch](https://www.terraform.io/docs/providers/aws/r/cloudwatch_event_rule.html)
 
 Furthermore this module supports:
@@ -18,20 +14,41 @@ Furthermore this module supports:
 
 ## Examples
 
-with event source mapping:
+with CloudWatch event source:
 
 ```
 module "lambda" {
-  source              = "github.com/spring-media/terraform-aws-lambda"
-  name                = "scheduled"
-  function_name       = "lambda-blueprint-scheduled-fct"
-  s3_bucket           = "${var.s3_bucket}"
-  s3_key              = "${var.version}/scheduled.zip"
-  schedule_expression = "rate(1 minute)"
+  source        = "github.com/spring-media/terraform-aws-lambda"
+  name          = "scheduled"
+  function_name = "lambda-blueprint-scheduled-fct"
+  s3_bucket     = "${var.s3_bucket}"
+  s3_key        = "${var.version}/scheduled.zip"
+
+  event {
+    type                = "cloudwatch-event"
+    schedule_expression = "rate(1 minute)"
+  }
 }
 ```
 
-with ssm support:
+with DynamoDb stream event source: 
+
+```
+module "lambda" {
+  source        = "github.com/spring-media/terraform-aws-lambda"
+  name          = "stream"
+  function_name = "lambda-blueprint-stream-fct"
+  s3_bucket     = "${var.s3_bucket}"
+  s3_key        = "${var.version}/stream.zip"
+
+  event {
+    type                             = "dynamodb"
+    schedule_stream_event_source_arn = "arn:..."
+  }
+}
+```
+
+adding ssm support:
 
 ```
 data "aws_kms_key" "kms" {
@@ -39,19 +56,23 @@ data "aws_kms_key" "kms" {
 }
 
 module "lambda" {
-  source              = "github.com/spring-media/terraform-aws-lambda"
-  name                = "scheduled"
-  function_name       = "lambda-blueprint-scheduled-fct"
-  s3_bucket           = "${var.s3_bucket}"
-  s3_key              = "${var.version}/scheduled.zip"
-  schedule_expression = "rate(1 minute)"
+  source        = "github.com/spring-media/terraform-aws-lambda"
+  name          = "scheduled"
+  function_name = "lambda-blueprint-scheduled-fct"
+  s3_bucket     = "${var.s3_bucket}"
+  s3_key        = "${var.version}/scheduled.zip"
+
+  event {
+    type                = "cloudwatch-event"
+    schedule_expression = "rate(1 minute)"
+  }
 
   ssm_parameter_names = ["some/nested/param", "some/other/nested/param/*"]
   kms_key_arn         = "${data.aws_kms_key.kms.arn}"
 }
 ```
 
-with CloudWatch Logs to Lambda/Elasticsearch stream subscription:
+adding CloudWatch Logs to Lambda/Elasticsearch stream subscription:
 
 ```
 data "aws_lambda_function" "logging_lambda" {
@@ -59,12 +80,16 @@ data "aws_lambda_function" "logging_lambda" {
 }
 
 module "lambda" {
-  source              = "github.com/spring-media/terraform-aws-lambda"
-  name                = "scheduled"
-  function_name       = "lambda-blueprint-scheduled-fct"
-  s3_bucket           = "${var.s3_bucket}"
-  s3_key              = "${var.version}/scheduled.zip"
-  schedule_expression = "rate(1 minute)"
+  source        = "github.com/spring-media/terraform-aws-lambda"
+  name          = "scheduled"
+  function_name = "lambda-blueprint-scheduled-fct"
+  s3_bucket     = "${var.s3_bucket}"
+  s3_key        = "${var.version}/scheduled.zip"
+
+  event {
+    type                = "cloudwatch-event"
+    schedule_expression = "rate(1 minute)"
+  }
 
   // see https://github.com/terraform-providers/terraform-provider-aws/issues/4446 why we use replace here
   logfilter_destination_arn = "${replace(data.aws_lambda_function.logging_lambda.arn,":$LATEST","")}"
@@ -77,6 +102,7 @@ module "lambda" {
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | description | Description of what your Lambda Function does. | string | `` | no |
+| event | Event source configuration which triggers the Lambda function. See https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html for supported event sources. | map | `<map>` | no |
 | function_name | A unique name for your Lambda Function. | string | - | yes |
 | handler | The function entrypoint in your code. Defaults to the name var of this module. | string | `` | no |
 | kms_key_arn | The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters. | string | `` | no |
@@ -87,12 +113,7 @@ module "lambda" {
 | runtime | The runtime environment for the Lambda function you are uploading. Defaults to go1.x | string | `go1.x` | no |
 | s3_bucket | The S3 bucket location containing the function's deployment package. This bucket must reside in the same AWS region where you are creating the Lambda function. | string | - | yes |
 | s3_key | The S3 key of an object containing the function's deployment package. | string | - | yes |
-| schedule_expression | An optional scheduling expression for triggering the Lambda Function using CloudWatch events. For example, cron(0 20 * * ? *) or rate(5 minutes). | string | `` | no |
-| ssm_parameter_names | List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well. | string | `<list>` | no |
-| stream_batch_size | The largest number of records that Lambda will retrieve from your event source at the time of invocation. Defaults to 100. | string | `100` | no |
-| stream_enabled | This enables creation of a stream event source mapping for the Lambda function. Defaults to false. | string | `false` | no |
-| stream_event_source_arn | An optional event source ARN - can either be a Kinesis or DynamoDB stream. | string | `` | no |
-| stream_starting_position | The position in the stream where AWS Lambda should start reading. Must be one of either TRIM_HORIZON or LATEST. Defaults to TRIM_HORIZON. | string | `TRIM_HORIZON` | no |
+| ssm_parameter_names | List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well. | list | `<list>` | no |
 | tags | A mapping of tags to assign to the Lambda function. | map | `<map>` | no |
 | timeout | The amount of time your Lambda Function has to run in seconds. Defaults to 3. | string | `3` | no |
 

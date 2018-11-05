@@ -74,8 +74,8 @@ variable "timeout" {
   default     = 3
 }
 
-variable "trigger" {
-  description = "Event source configuration which triggers the Lambda function."
+variable "event" {
+  description = "Event source configuration which triggers the Lambda function. See https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html for supported event sources."
   type        = "map"
   default     = {}
 }

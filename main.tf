@@ -22,21 +22,21 @@ data "aws_iam_policy_document" "assume_role_policy" {
   }
 }
 
-module "trigger-cloudwatch-event" {
-  enable = "${lookup(var.trigger, "type", "") == "cloudwatch-event" ? 1 : 0}"
-  source = "./modules/trigger/cloudwatch-event"
+module "event-cloudwatch-event" {
+  enable = "${lookup(var.event, "type", "") == "cloudwatch-event" ? 1 : 0}"
+  source = "./modules/event/cloudwatch-event"
 
   lambda_function_arn = "${aws_lambda_function.lambda.arn}"
-  schedule_expression = "${lookup(var.trigger, "schedule_expression", "")}"
+  schedule_expression = "${lookup(var.event, "schedule_expression", "")}"
 }
 
-module "trigger-dynamodb" {
-  enable = "${lookup(var.trigger, "type", "") == "dynamodb" ? 1 : 0}"
-  source = "./modules/trigger/dynamodb"
+module "event-dynamodb" {
+  enable = "${lookup(var.event, "type", "") == "dynamodb" ? 1 : 0}"
+  source = "./modules/event/dynamodb"
 
   function_name           = "${aws_lambda_function.lambda.function_name}"
   iam_role_name           = "${aws_iam_role.lambda.name}"
-  stream_event_source_arn = "${lookup(var.trigger, "stream_event_source_arn", "")}"
+  stream_event_source_arn = "${lookup(var.event, "stream_event_source_arn", "")}"
 }
 
 resource "aws_iam_role" "lambda" {
