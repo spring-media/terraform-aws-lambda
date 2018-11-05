@@ -5,7 +5,7 @@ resource "aws_lambda_function" "lambda" {
   s3_key        = "${var.s3_key}"
   role          = "${aws_iam_role.lambda.arn}"
   runtime       = "${var.runtime}"
-  handler       = "${var.handler != "" ? var.handler : var.name}"
+  handler       = "${var.handler}"
   timeout       = "${var.timeout}"
   memory_size   = "${var.memory_size}"
   tags          = "${var.tags}"

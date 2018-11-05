@@ -7,8 +7,8 @@ variable "function_name" {
   description = "A unique name for your Lambda Function."
 }
 
-variable "name" {
-  description = "A unique name for this Lambda module."
+variable "handler" {
+  description = "The function entrypoint in your code."
 }
 
 variable "s3_bucket" {
@@ -25,11 +25,6 @@ variable "s3_key" {
 # ---------------------------------------------------------------------------------------------------------------------
 variable "description" {
   description = "Description of what your Lambda Function does."
-  default     = ""
-}
-
-variable "handler" {
-  description = "The function entrypoint in your code. Defaults to the name var of this module."
   default     = ""
 }
 
