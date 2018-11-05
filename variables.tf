@@ -63,26 +63,6 @@ variable "ssm_parameter_names" {
   default     = []
 }
 
-variable "stream_batch_size" {
-  description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation. Defaults to 100."
-  default     = 100
-}
-
-variable "stream_enabled" {
-  description = "This enables creation of a stream event source mapping for the Lambda function. Defaults to false."
-  default     = false
-}
-
-variable "stream_event_source_arn" {
-  description = "An optional event source ARN - can either be a Kinesis or DynamoDB stream."
-  default     = ""
-}
-
-variable "stream_starting_position" {
-  description = "The position in the stream where AWS Lambda should start reading. Must be one of either TRIM_HORIZON or LATEST. Defaults to TRIM_HORIZON."
-  default     = "TRIM_HORIZON"
-}
-
 variable "tags" {
   description = "A mapping of tags to assign to the Lambda function."
   type        = "map"
@@ -95,7 +75,7 @@ variable "timeout" {
 }
 
 variable "trigger" {
-  description = "The object describing the source of events which trigger the function."
+  description = "Event source configuration which triggers the Lambda function."
   type        = "map"
   default     = {}
 }
