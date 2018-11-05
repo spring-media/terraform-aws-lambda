@@ -58,34 +58,9 @@ variable "runtime" {
   default     = "go1.x"
 }
 
-variable "schedule_expression" {
-  description = "An optional scheduling expression for triggering the Lambda Function using CloudWatch events. For example, cron(0 20 * * ? *) or rate(5 minutes)."
-  default     = ""
-}
-
 variable "ssm_parameter_names" {
   description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well."
   default     = []
-}
-
-variable "stream_batch_size" {
-  description = "The largest number of records that Lambda will retrieve from your event source at the time of invocation. Defaults to 100."
-  default     = 100
-}
-
-variable "stream_enabled" {
-  description = "This enables creation of a stream event source mapping for the Lambda function. Defaults to false."
-  default     = false
-}
-
-variable "stream_event_source_arn" {
-  description = "An optional event source ARN - can either be a Kinesis or DynamoDB stream."
-  default     = ""
-}
-
-variable "stream_starting_position" {
-  description = "The position in the stream where AWS Lambda should start reading. Must be one of either TRIM_HORIZON or LATEST. Defaults to TRIM_HORIZON."
-  default     = "TRIM_HORIZON"
 }
 
 variable "tags" {
@@ -97,4 +72,10 @@ variable "tags" {
 variable "timeout" {
   description = "The amount of time your Lambda Function has to run in seconds. Defaults to 3."
   default     = 3
+}
+
+variable "event" {
+  description = "Event source configuration which triggers the Lambda function. See https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html for supported event sources."
+  type        = "map"
+  default     = {}
 }

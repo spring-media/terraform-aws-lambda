@@ -11,9 +11,6 @@ resource "aws_lambda_function" "lambda" {
   tags          = "${var.tags}"
 }
 
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
-
 data "aws_iam_policy_document" "assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -23,6 +20,23 @@ data "aws_iam_policy_document" "assume_role_policy" {
       identifiers = ["lambda.amazonaws.com"]
     }
   }
+}
+
+module "event-cloudwatch-event" {
+  enable = "${lookup(var.event, "type", "") == "cloudwatch-event" ? 1 : 0}"
+  source = "./modules/event/cloudwatch-event"
+
+  lambda_function_arn = "${aws_lambda_function.lambda.arn}"
+  schedule_expression = "${lookup(var.event, "schedule_expression", "")}"
+}
+
+module "event-dynamodb" {
+  enable = "${lookup(var.event, "type", "") == "dynamodb" ? 1 : 0}"
+  source = "./modules/event/dynamodb"
+
+  function_name           = "${aws_lambda_function.lambda.function_name}"
+  iam_role_name           = "${aws_iam_role.lambda.name}"
+  stream_event_source_arn = "${lookup(var.event, "stream_event_source_arn", "")}"
 }
 
 resource "aws_iam_role" "lambda" {
@@ -77,64 +91,8 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_logs_to_es" {
   destination_arn = "${var.logfilter_destination_arn}"
 }
 
-resource "aws_lambda_permission" "cloudwatch" {
-  count         = "${var.schedule_expression != "" ? 1 : 0}"
-  statement_id  = "AllowExecutionFromCloudWatch"
-  action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.lambda.arn}"
-  principal     = "events.amazonaws.com"
-  source_arn    = "${aws_cloudwatch_event_rule.lambda.arn}"
-}
-
-resource "aws_cloudwatch_event_rule" "lambda" {
-  count               = "${var.schedule_expression != "" ? 1 : 0}"
-  name                = "${var.function_name}"
-  schedule_expression = "${var.schedule_expression}"
-}
-
-resource "aws_cloudwatch_event_target" "lambda" {
-  count     = "${var.schedule_expression != "" ? 1 : 0}"
-  target_id = "${var.function_name}"
-  rule      = "${aws_cloudwatch_event_rule.lambda.name}"
-  arn       = "${aws_lambda_function.lambda.arn}"
-}
-
-resource "aws_lambda_event_source_mapping" "stream_source" {
-  count             = "${var.stream_enabled}"
-  event_source_arn  = "${var.stream_event_source_arn}"
-  function_name     = "${aws_lambda_function.lambda.function_name}"
-  starting_position = "${var.stream_starting_position}"
-}
-
-data "aws_iam_policy_document" "stream_policy_document" {
-  statement {
-    // TODO: support kinesis
-    actions = [
-      "dynamodb:DescribeStream",
-      "dynamodb:GetShardIterator",
-      "dynamodb:GetRecords",
-      "dynamodb:ListStreams",
-    ]
-
-    // TODO: restrict on specific table/region/account?
-    resources = [
-      "arn:aws:dynamodb:*:*:*",
-    ]
-  }
-}
-
-resource "aws_iam_policy" "stream_policy" {
-  count       = "${var.stream_enabled}"
-  name        = "${var.function_name}-stream-consumer"
-  description = "Provides minimum DynamoDb stream processing permissions for ${var.function_name}."
-  policy      = "${data.aws_iam_policy_document.stream_policy_document.json}"
-}
-
-resource "aws_iam_role_policy_attachment" "stream_policy_attachment" {
-  count      = "${var.stream_enabled}"
-  role       = "${aws_iam_role.lambda.name}"
-  policy_arn = "${aws_iam_policy.stream_policy.arn}"
-}
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "ssm_policy_document" {
   count = "${length(var.ssm_parameter_names)}"
