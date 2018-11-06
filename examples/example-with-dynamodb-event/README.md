@@ -1,6 +1,7 @@
 # Example with DynamoDb event
 
 Creates an AWS Lambda function triggered by a DynamoDb [event](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html#supported-event-source-dynamo-db).
+
 ## requirements
 
 * [Terraform 0.11.7+](https://www.terraform.io/)
