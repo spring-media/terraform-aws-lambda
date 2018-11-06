@@ -22,9 +22,9 @@ data "aws_iam_policy_document" "assume_role_policy" {
   }
 }
 
-module "event-cloudwatch-event" {
-  enable = "${lookup(var.event, "type", "") == "cloudwatch-event" ? 1 : 0}"
-  source = "./modules/event/cloudwatch-event"
+module "event-cloudwatch-scheduled-event" {
+  enable = "${lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? 1 : 0}"
+  source = "./modules/event/cloudwatch-scheduled-event"
 
   lambda_function_arn = "${aws_lambda_function.lambda.arn}"
   schedule_expression = "${lookup(var.event, "schedule_expression", "")}"
