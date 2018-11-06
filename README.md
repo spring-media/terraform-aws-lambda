@@ -12,6 +12,31 @@ Furthermore this module supports:
 * reading configuration and secrets from [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html) including decryption of [SecureString](https://docs.aws.amazon.com/kms/latest/developerguide/services-parameter-store.html) parameters
 * [CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html) Log group configuration including retention time and [subscription filters](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html) e.g. to stream logs via Lambda to Elasticsearch
 
+## How to use this module
+
+The default configuration of this module is optimized for the `go1.x`runtime, but it can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda. For an optionated example how to use this Lambda module in a golang project, see [lambda-blueprint](https://github.com/spring-media/lambda-blueprint).
+
+In general configure the Lambda function with all mandatory variables and add an event source. Make sure, that `s3_bucket` and `s3_key` point to an existing archive.
+
+```
+provider "aws" {
+  region = "eu-west-1"
+}
+
+module "lambda" {
+  source        = "github.com/spring-media/terraform-aws-lambda?ref=v2.3.0"
+  handler       = "some-handler"
+  function_name = "handler"
+  s3_bucket     = "some-bucket"
+  s3_key        = "v1.0.0/handler.zip"
+
+  event {
+    type                = "cloudwatch-scheduled-event"
+    schedule_expression = "rate(1 minute)"
+  }
+}
+```
+
 ## Examples
 
 * [example-with-dynamodb-event-source](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event-source)
