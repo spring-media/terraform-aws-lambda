@@ -14,7 +14,7 @@ Furthermore this module supports:
 
 ## How to use this module
 
-The default configuration of this module is optimized for the `go1.x`runtime, but it can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda. For an optionated example how to use this Lambda module in a golang project, see [lambda-blueprint](https://github.com/spring-media/lambda-blueprint).
+The default configuration of this module is optimized for the `go1.x`runtime, but it can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda. For an opinionated example how to use this Lambda module in a golang project, see [lambda-blueprint](https://github.com/spring-media/lambda-blueprint).
 
 In general configure the Lambda function with all mandatory variables and add an event source. Make sure, that `s3_bucket` and `s3_key` point to an existing archive.
 
