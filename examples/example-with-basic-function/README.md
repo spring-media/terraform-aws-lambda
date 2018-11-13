@@ -1,6 +1,6 @@
-# Example with CloudWatch scheduled event
+# Example with basic Lambda function
 
-Creates an AWS Lambda function triggered by a CloudWatch (scheduled) [event](https://docs.aws.amazon.com/lambda/latest/dg/with-scheduled-events.html).
+Creates an AWS Lambda function without an event source.
 
 ## requirements
 

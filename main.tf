@@ -1,9 +1,9 @@
-resource "aws_lambda_function" "lambda" {
+module "lambda" {
+  source        = "./modules/lambda"
   function_name = "${var.function_name}"
   description   = "${var.description}"
   s3_bucket     = "${var.s3_bucket}"
   s3_key        = "${var.s3_key}"
-  role          = "${aws_iam_role.lambda.arn}"
   runtime       = "${var.runtime}"
   handler       = "${var.handler}"
   timeout       = "${var.timeout}"
@@ -11,22 +11,11 @@ resource "aws_lambda_function" "lambda" {
   tags          = "${var.tags}"
 }
 
-data "aws_iam_policy_document" "assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
-}
-
 module "event-cloudwatch-scheduled-event" {
   enable = "${lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? 1 : 0}"
   source = "./modules/event/cloudwatch-scheduled-event"
 
-  lambda_function_arn = "${aws_lambda_function.lambda.arn}"
+  lambda_function_arn = "${module.lambda.arn}"
   schedule_expression = "${lookup(var.event, "schedule_expression", "")}"
 }
 
@@ -34,16 +23,10 @@ module "event-dynamodb" {
   enable = "${lookup(var.event, "type", "") == "dynamodb" ? 1 : 0}"
   source = "./modules/event/dynamodb"
 
-  function_name           = "${aws_lambda_function.lambda.function_name}"
-  iam_role_name           = "${aws_iam_role.lambda.name}"
+  function_name           = "${module.lambda.function_name}"
+  iam_role_name           = "${module.lambda.role_name}"
   stream_event_source_arn = "${lookup(var.event, "stream_event_source_arn", "")}"
   table_name              = "${lookup(var.event, "table_name", "")}"
-}
-
-resource "aws_iam_role" "lambda" {
-  name = "${var.function_name}-role"
-
-  assume_role_policy = "${data.aws_iam_policy_document.assume_role_policy.json}"
 }
 
 data "aws_iam_policy_document" "cloudwatch_logs" {
@@ -60,18 +43,18 @@ data "aws_iam_policy_document" "cloudwatch_logs" {
 }
 
 resource "aws_iam_policy" "cloudwatch_logs_policy" {
-  name        = "${var.function_name}-cloudwatch-logs"
-  description = "Provides minimum CloudWatch Logs permissions for ${var.function_name}."
+  name        = "${module.lambda.function_name}-cloudwatch-logs"
+  description = "Provides minimum CloudWatch Logs permissions for ${module.lambda.function_name}."
   policy      = "${data.aws_iam_policy_document.cloudwatch_logs.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "cloudwatch_logs_policy_attachment" {
-  role       = "${aws_iam_role.lambda.name}"
+  role       = "${module.lambda.function_name}"
   policy_arn = "${aws_iam_policy.cloudwatch_logs_policy.arn}"
 }
 
 resource "aws_cloudwatch_log_group" "lambda" {
-  name              = "/aws/lambda/${aws_lambda_function.lambda.function_name}"
+  name              = "/aws/lambda/${module.lambda.function_name}"
   retention_in_days = "${var.log_retention_in_days}"
 }
 
@@ -111,14 +94,14 @@ data "aws_iam_policy_document" "ssm_policy_document" {
 
 resource "aws_iam_policy" "ssm_policy" {
   count       = "${length(var.ssm_parameter_names)}"
-  name        = "${var.function_name}-ssm-${count.index}"
-  description = "Provides minimum Parameter Store permissions for ${var.function_name}."
+  name        = "${module.lambda.function_name}-ssm-${count.index}"
+  description = "Provides minimum Parameter Store permissions for ${module.lambda.function_name}."
   policy      = "${data.aws_iam_policy_document.ssm_policy_document.*.json[count.index]}"
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_policy_attachment" {
   count      = "${length(var.ssm_parameter_names)}"
-  role       = "${aws_iam_role.lambda.name}"
+  role       = "${module.lambda.role_name}"
   policy_arn = "${aws_iam_policy.ssm_policy.*.arn[count.index]}"
 }
 
@@ -136,13 +119,13 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
 resource "aws_iam_policy" "kms_policy" {
   count       = "${var.kms_key_arn != "" ? 1 : 0}"
-  name        = "${var.function_name}-kms"
-  description = "Provides minimum KMS permissions for ${var.function_name}."
+  name        = "${module.lambda.function_name}-kms"
+  description = "Provides minimum KMS permissions for ${module.lambda.function_name}."
   policy      = "${data.aws_iam_policy_document.kms_policy_document.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
   count      = "${var.kms_key_arn != "" ? 1 : 0}"
-  role       = "${aws_iam_role.lambda.name}"
+  role       = "${module.lambda.role_name}"
   policy_arn = "${aws_iam_policy.kms_policy.arn}"
 }
