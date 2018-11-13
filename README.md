@@ -1,6 +1,6 @@
 # AWS Lambda Terraform module [![Build Status](https://travis-ci.com/spring-media/terraform-aws-lambda.svg?branch=master)](https://travis-ci.com/spring-media/terraform-aws-lambda) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources.
+Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources with configurable event sources, IAM role configuration as well as SSM/KMS and log streaming support.
 
 The following [event sources](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html) are supported (see [examples](#examples)):
 
@@ -24,7 +24,7 @@ provider "aws" {
 }
 
 module "lambda" {
-  source        = "github.com/spring-media/terraform-aws-lambda?ref=v2.3.0"
+  source        = "github.com/spring-media/terraform-aws-lambda?ref=v2.4.0"
   handler       = "some-handler"
   function_name = "handler"
   s3_bucket     = "some-bucket"
@@ -39,6 +39,7 @@ module "lambda" {
 
 ## Examples
 
+* [example-with-basic-function](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-basic-function)
 * [example-with-dynamodb-event-source](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event)
 * [example-with-cloudwatch-scheduled-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-scheduled-event)
 
@@ -68,3 +69,4 @@ module "lambda" {
 | arn | The Amazon Resource Name (ARN) identifying your Lambda Function. |
 | function\_name | The unique name of your Lambda Function. |
 | invoke\_arn | The ARN to be used for invoking Lambda Function from API Gateway - to be used in aws_api_gateway_integration's uri |
+| role\_name | The name of the IAM role attached to the Lambda Function. |
