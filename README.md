@@ -24,7 +24,8 @@ provider "aws" {
 }
 
 module "lambda" {
-  source        = "github.com/spring-media/terraform-aws-lambda?ref=v2.4.0"
+  source        = "spring-media/lambda/aws"
+  version       = "2.4.1"
   handler       = "some-handler"
   function_name = "handler"
   s3_bucket     = "some-bucket"
