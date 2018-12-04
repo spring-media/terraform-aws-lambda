@@ -35,6 +35,10 @@ module "lambda" {
     type                = "cloudwatch-scheduled-event"
     schedule_expression = "rate(1 minute)"
   }
+
+  environment_variables {
+    logging_level = "INFO"
+  }
 }
 ```
 
@@ -62,6 +66,7 @@ module "lambda" {
 | ssm\_parameter\_names | List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well. | list | `<list>` | no |
 | tags | A mapping of tags to assign to the Lambda function. | map | `<map>` | no |
 | timeout | The amount of time your Lambda Function has to run in seconds. Defaults to 3. | string | `3` | no |
+| environment\_variables | A map of environment variables which pass into lambda code | `<map>` | - | no |
 
 ## Outputs
 
