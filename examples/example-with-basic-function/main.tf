@@ -16,4 +16,10 @@ module "lambda" {
   tags {
     key = "value"
   }
+
+  environment {
+    variables {
+      stage = "dev"
+    }
+  }
 }

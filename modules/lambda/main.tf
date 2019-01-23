@@ -10,9 +10,7 @@ resource "aws_lambda_function" "lambda" {
   memory_size   = "${var.memory_size}"
   tags          = "${var.tags}"
 
-  environment {
-    variables = "${var.environment_variables}"
-  }
+  environment = ["${slice(list(var.environment), 0, length(var.environment) == 0 ? 0 : 1 )}"]
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {

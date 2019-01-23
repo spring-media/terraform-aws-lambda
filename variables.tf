@@ -75,7 +75,7 @@ variable "timeout" {
   default     = 3
 }
 
-variable "environment_variables" {
+variable "environment" {
   description = "Environment variables are key-value pairs and enable you to dynamically pass settings to your function code and libraries"
   type        = "map"
   default     = {}

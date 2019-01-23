@@ -48,8 +48,8 @@ variable "timeout" {
   default     = 3
 }
 
-variable "environment_variables" {
-  description = "Environment variables are key-value pairs and enable you to dynamically pass settings to your function code and libraries"
+variable "environment" {
+  description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
   type        = "map"
   default     = {}
 }
