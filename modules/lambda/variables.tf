@@ -32,6 +32,12 @@ variable "description" {
   default     = ""
 }
 
+variable "environment" {
+  description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
+  type        = "map"
+  default     = {}
+}
+
 variable "memory_size" {
   description = "Amount of memory in MB your Lambda Function can use at runtime. Defaults to 128."
   default     = 128
@@ -46,10 +52,4 @@ variable "tags" {
 variable "timeout" {
   description = "The amount of time your Lambda Function has to run in seconds. Defaults to 3."
   default     = 3
-}
-
-variable "environment" {
-  description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
-  type        = "map"
-  default     = {}
 }
