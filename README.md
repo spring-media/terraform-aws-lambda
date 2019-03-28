@@ -37,6 +37,12 @@ module "lambda" {
     type                = "cloudwatch-scheduled-event"
     schedule_expression = "rate(1 minute)"
   }
+
+  environment {
+    variables {
+      loglevel = "INFO"
+    }
+  }
 }
 ```
 
@@ -45,6 +51,8 @@ module "lambda" {
 - [example-with-basic-function](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-basic-function)
 - [example-with-dynamodb-event-source](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event)
 - [example-with-cloudwatch-scheduled-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-scheduled-event)
+
+## Inputs
 
 ## Inputs
 
@@ -64,6 +72,7 @@ module "lambda" {
 | ssm_parameter_names       | List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well. |  list  | `<list>` |    no    |
 | tags                      | A mapping of tags to assign to the Lambda function.                                                                                                                        |  map   | `<map>`  |    no    |
 | timeout                   | The amount of time your Lambda Function has to run in seconds. Defaults to 3.                                                                                              | string |   `3`    |    no    |
+| environment               | environment configuration (e.g. a map of variables) which pass into lambda code | `<map>` | - | no |
 
 ## Outputs
 
@@ -73,3 +82,4 @@ module "lambda" {
 | function_name | The unique name of your Lambda Function.                                                                           |
 | invoke_arn    | The ARN to be used for invoking Lambda Function from API Gateway - to be used in aws_api_gateway_integration's uri |
 | role_name     | The name of the IAM role attached to the Lambda Function.                                                          |
+                                                          |

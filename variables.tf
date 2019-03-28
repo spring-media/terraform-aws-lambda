@@ -74,3 +74,9 @@ variable "timeout" {
   description = "The amount of time your Lambda Function has to run in seconds. Defaults to 3."
   default     = 3
 }
+
+variable "environment" {
+  description = "Environment variables are key-value pairs and enable you to dynamically pass settings to your function code and libraries"
+  type        = "map"
+  default     = {}
+}

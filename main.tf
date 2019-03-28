@@ -9,6 +9,7 @@ module "lambda" {
   timeout       = "${var.timeout}"
   memory_size   = "${var.memory_size}"
   tags          = "${var.tags}"
+  environment   = "${var.environment}"
 }
 
 module "event-cloudwatch-scheduled-event" {

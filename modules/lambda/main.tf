@@ -9,6 +9,8 @@ resource "aws_lambda_function" "lambda" {
   timeout       = "${var.timeout}"
   memory_size   = "${var.memory_size}"
   tags          = "${var.tags}"
+
+  environment = ["${slice(list(var.environment), 0, length(var.environment) == 0 ? 0 : 1 )}"]
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {

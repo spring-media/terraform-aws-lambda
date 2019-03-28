@@ -39,6 +39,8 @@ module "lambda" {
 | s3\_key | The S3 key of an object containing the function's deployment package. | string | - | yes |
 | tags | A mapping of tags to assign to the Lambda function. | map | `<map>` | no |
 | timeout | The amount of time your Lambda Function has to run in seconds. Defaults to 3. | string | `3` | no |
+| environment | A map of environment configuration (e.g. variables) which pass into lambda code | `<map>` | - | no |
+
 
 ## Outputs
 
