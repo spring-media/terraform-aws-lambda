@@ -18,7 +18,7 @@ terraform plan
 
 To build or change real infrastructure on AWS (**this will create costs**) create
 an S3 deployment bucket (`make s3-init`) and upload a go function (`make package`)
-using the [Makefile](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/functions/go-basic) and then
+using the [Makefile](https://github.com/spring-media/terraform-aws-lambda/blob/master/examples/example-with-cloudwatch-scheduled-event/func/Makefile) and then
 
 ```
 terraform apply
