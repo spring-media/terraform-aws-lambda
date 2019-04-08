@@ -30,6 +30,7 @@ action "terraform-validate" {
   uses = "hashicorp/terraform-github-actions/validate@v0.2.0"
   needs = "terraform-init"
   secrets = [ "GITHUB_TOKEN" ]
+  args = ["-var", "function_name=test_function", "-var", "handler=handler", "-var", "s3_bucket=bucket", "-var", "s3_key=key"]
   env = {
     TF_ACTION_WORKING_DIR = "."
   }
