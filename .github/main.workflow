@@ -33,5 +33,6 @@ action "terraform-validate" {
   args = ["-var", "function_name=test_function", "-var", "handler=handler", "-var", "s3_bucket=bucket", "-var", "s3_key=key"]
   env = {
     TF_ACTION_WORKING_DIR = "."
+    AWS_DEFAULT_REGION="eu-west-1"
   }
 }
