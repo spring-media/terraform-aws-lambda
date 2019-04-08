@@ -6,4 +6,4 @@ orbs:
 workflows:
   "Hello TF":
     jobs:
-      - terraform:terraform_test
+      - terraform/terraform_test
