@@ -1,5 +1,4 @@
-resource "aws_lambda_function" "lambda" {
-  function_name = "${var.function_name}"
+resource "aws_lambda_function" "lambda" {function_name = "${var.function_name}"
   description   = "${var.description}"
   s3_bucket     = "${var.s3_bucket}"
   s3_key        = "${var.s3_key}"
