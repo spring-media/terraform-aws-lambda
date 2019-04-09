@@ -1,4 +1,5 @@
-module "lambda" {source        = "./modules/lambda"
+module "lambda" {
+  source        = "./modules/lambda"
   function_name = "${var.function_name}"
   description   = "${var.description}"
   s3_bucket     = "${var.s3_bucket}"
