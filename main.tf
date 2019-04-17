@@ -12,6 +12,13 @@ module "lambda" {
   environment   = "${var.environment}"
 }
 
+module "event-alb" {
+  enable = "${lookup(var.event, "type", "") == "alb" ? 1 : 0}"
+  source = "./modules/event/alb"
+
+  target_group_arn = "${lookup(var.event, "target_group_arn", "")}"
+}
+
 module "event-cloudwatch-scheduled-event" {
   enable = "${lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? 1 : 0}"
   source = "./modules/event/cloudwatch-scheduled-event"
