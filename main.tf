@@ -1,15 +1,17 @@
 module "lambda" {
-  source        = "./modules/lambda"
-  function_name = "${var.function_name}"
-  description   = "${var.description}"
-  s3_bucket     = "${var.s3_bucket}"
-  s3_key        = "${var.s3_key}"
-  runtime       = "${var.runtime}"
-  handler       = "${var.handler}"
-  timeout       = "${var.timeout}"
-  memory_size   = "${var.memory_size}"
-  tags          = "${var.tags}"
-  environment   = "${var.environment}"
+  source             = "./modules/lambda"
+  function_name      = "${var.function_name}"
+  description        = "${var.description}"
+  s3_bucket          = "${var.s3_bucket}"
+  s3_key             = "${var.s3_key}"
+  runtime            = "${var.runtime}"
+  handler            = "${var.handler}"
+  timeout            = "${var.timeout}"
+  memory_size        = "${var.memory_size}"
+  tags               = "${var.tags}"
+  environment        = "${var.environment}"
+  security_group_ids = "${var.security_group_ids}"
+  subnet_ids         = "${var.subnet_ids}"
 }
 
 module "event-cloudwatch-scheduled-event" {

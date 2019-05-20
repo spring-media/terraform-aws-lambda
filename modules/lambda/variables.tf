@@ -43,6 +43,18 @@ variable "memory_size" {
   default     = 128
 }
 
+variable "security_group_ids" {
+  description = "A list of security group IDs associated with the Lambda function. Required in conjunction with 'subnet_ids' if your function should access your VPC."
+  type        = "list"
+  default     = []
+}
+
+variable "subnet_ids" {
+  description = "A list of subnet IDs associated with the Lambda function. Required in conjunction with 'security_group_ids' if your function should access your VPC."
+  type        = "list"
+  default     = []
+}
+
 variable "tags" {
   description = "A mapping of tags to assign to the Lambda function."
   type        = "map"

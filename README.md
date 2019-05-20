@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/spring-media/terraform-aws-lambda.svg?branch=master)](https://travis-ci.com/spring-media/terraform-aws-lambda) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-2.5.1-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/2.5.1) ![Terraform Version](https://img.shields.io/badge/Terraform-0.11.11-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources with configurable event sources, IAM role configuration as well as SSM/KMS and log streaming support.
+Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources with configurable event sources, IAM configuration, VPC as well as SSM/KMS and log streaming support.
 
 The following [event sources](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html) are supported (see [examples](#examples)):
 
@@ -50,6 +50,7 @@ module "lambda" {
 
 - [example-with-dynamodb-event-source](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event)
 - [example-with-cloudwatch-scheduled-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-scheduled-event)
+- [example-with-vpc](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-vpc)
 
 ## Inputs
 
@@ -67,7 +68,9 @@ module "lambda" {
 | runtime                   | The runtime environment for the Lambda function you are uploading. Defaults to go1.x                                                                                       | string | `"go1.x"` |    no    |
 | s3_bucket                 | The S3 bucket location containing the function's deployment package. This bucket must reside in the same AWS region where you are creating the Lambda function.            | string |    n/a    |   yes    |
 | s3_key                    | The S3 key of an object containing the function's deployment package.                                                                                                      | string |    n/a    |   yes    |
+| security_group_ids        | A list of security group IDs associated with the Lambda function. Required in conjunction with 'subnet_ids' if your function should access your VPC.                       |  list  | `<list>`  |    no    |
 | ssm_parameter_names       | List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well. |  list  | `<list>`  |    no    |
+| subnet_ids                | A list of subnet IDs associated with the Lambda function. Required in conjunction with 'security_group_ids' if your function should access your VPC.                       |  list  | `<list>`  |    no    |
 | tags                      | A mapping of tags to assign to the Lambda function.                                                                                                                        |  map   |  `<map>`  |    no    |
 | timeout                   | The amount of time your Lambda Function has to run in seconds. Defaults to 3.                                                                                              | string |   `"3"`   |    no    |
 

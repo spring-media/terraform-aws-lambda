@@ -65,8 +65,20 @@ variable "runtime" {
   default     = "go1.x"
 }
 
+variable "security_group_ids" {
+  description = "A list of security group IDs associated with the Lambda function. Required in conjunction with 'subnet_ids' if your function should access your VPC."
+  type        = "list"
+  default     = []
+}
+
 variable "ssm_parameter_names" {
   description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well."
+  default     = []
+}
+
+variable "subnet_ids" {
+  description = "A list of subnet IDs associated with the Lambda function. Required in conjunction with 'security_group_ids' if your function should access your VPC."
+  type        = "list"
   default     = []
 }
 
