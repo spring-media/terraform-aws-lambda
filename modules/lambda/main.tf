@@ -12,8 +12,8 @@ resource "aws_lambda_function" "lambda" {
   environment   = ["${slice(list(var.environment), 0, length(var.environment) == 0 ? 0 : 1 )}"]
 
   vpc_config {
-    security_group_ids = "${var.security_group_ids}"
-    subnet_ids         = "${var.subnet_ids}"
+    security_group_ids = ["${var.vpc_config["security_group_ids"]}"]
+    subnet_ids         = ["${var.vpc_config["subnet_ids"]}"]
   }
 }
 
@@ -34,7 +34,7 @@ resource "aws_iam_role" "lambda" {
 }
 
 resource "aws_iam_role_policy_attachment" "vpc_attachment" {
-  count = "${(length(var.security_group_ids) > 0 && length(var.subnet_ids) > 0) ? 1 : 0}"
+  count = "${(length(var.vpc_config["security_group_ids"]) > 0 && length(var.vpc_config["subnet_ids"]) > 0) ? 1 : 0}"
   role  = "${aws_iam_role.lambda.name}"
 
   // see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html

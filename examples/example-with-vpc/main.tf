@@ -13,9 +13,10 @@ module "lambda" {
   s3_bucket     = "tf-example-lambda-func-deployment-${data.aws_region.current.name}"
   s3_key        = "v0.1.0/example-lambda-func.zip"
 
-  // VPC config
-  subnet_ids         = ["subnet-123456", "subnet-123457"]
-  security_group_ids = ["sg-123456"]
+  vpc_config {
+    subnet_ids         = ["subnet-123456", "subnet-123457"]
+    security_group_ids = ["sg-123456"]
+  }
 
   event {
     type                = "cloudwatch-scheduled-event"

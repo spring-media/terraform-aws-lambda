@@ -43,18 +43,6 @@ variable "memory_size" {
   default     = 128
 }
 
-variable "security_group_ids" {
-  description = "A list of security group IDs associated with the Lambda function. Required in conjunction with 'subnet_ids' if your function should access your VPC."
-  type        = "list"
-  default     = []
-}
-
-variable "subnet_ids" {
-  description = "A list of subnet IDs associated with the Lambda function. Required in conjunction with 'security_group_ids' if your function should access your VPC."
-  type        = "list"
-  default     = []
-}
-
 variable "tags" {
   description = "A mapping of tags to assign to the Lambda function."
   type        = "map"
@@ -64,4 +52,14 @@ variable "tags" {
 variable "timeout" {
   description = "The amount of time your Lambda Function has to run in seconds. Defaults to 3."
   default     = 3
+}
+
+variable "vpc_config" {
+  description = "Provide this to allow your function to access your VPC (if both 'subnet_ids' and 'security_group_ids' are empty then vpc_config is considered to be empty or unset, see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html for details)."
+  type        = "map"
+
+  default = {
+    security_group_ids = []
+    subnet_ids         = []
+  }
 }
