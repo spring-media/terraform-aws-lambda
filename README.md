@@ -33,6 +33,7 @@ module "lambda" {
   s3_bucket     = "some-bucket"
   s3_key        = "v1.0.0/handler.zip"
 
+  // configurable event trigger
   event {
     type                = "cloudwatch-scheduled-event"
     schedule_expression = "rate(1 minute)"
@@ -42,6 +43,12 @@ module "lambda" {
     variables {
       loglevel = "INFO"
     }
+  }
+
+  // optionally enable VPC access
+  vpc_config {
+    security_group_ids = ["sg-1"]
+    subnet_ids         = ["subnet-1", "subnet-2"]
   }
 }
 ```
