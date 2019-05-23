@@ -10,6 +10,7 @@ module "lambda" {
   memory_size   = "${var.memory_size}"
   tags          = "${var.tags}"
   environment   = "${var.environment}"
+  vpc_config    = "${var.vpc_config}"
 }
 
 module "event-cloudwatch-scheduled-event" {
