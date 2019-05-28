@@ -75,6 +75,7 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_logs_to_es" {
   log_group_name  = "${aws_cloudwatch_log_group.lambda.name}"
   filter_pattern  = ""
   destination_arn = "${var.logfilter_destination_arn}"
+  distribution    = "ByLogStream"
 }
 
 data "aws_region" "current" {}
