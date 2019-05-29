@@ -1,15 +1,16 @@
 resource "aws_lambda_function" "lambda" {
-  function_name = "${var.function_name}"
-  description   = "${var.description}"
-  s3_bucket     = "${var.s3_bucket}"
-  s3_key        = "${var.s3_key}"
-  role          = "${aws_iam_role.lambda.arn}"
-  runtime       = "${var.runtime}"
-  handler       = "${var.handler}"
-  timeout       = "${var.timeout}"
-  memory_size   = "${var.memory_size}"
-  tags          = "${var.tags}"
-  environment   = ["${slice(list(var.environment), 0, length(var.environment) == 0 ? 0 : 1 )}"]
+  description      = "${var.description}"
+  environment      = ["${slice(list(var.environment), 0, length(var.environment) == 0 ? 0 : 1 )}"]
+  filename         = "${var.filename}"
+  function_name    = "${var.function_name}"
+  handler          = "${var.handler}"
+  memory_size      = "${var.memory_size}"
+  publish          = "${var.publish}"
+  role             = "${aws_iam_role.lambda.arn}"
+  runtime          = "${var.runtime}"
+  source_code_hash = "${filebase64sha256(var.filename)}"
+  tags             = "${var.tags}"
+  timeout          = "${var.timeout}"
 
   vpc_config {
     security_group_ids = ["${var.vpc_config["security_group_ids"]}"]

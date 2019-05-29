@@ -3,20 +3,16 @@
 # You must provide a value for each of these parameters.
 # ---------------------------------------------------------------------------------------------------------------------
 
+variable "filename" {
+  description = "The path to the function's deployment package within the local filesystem."
+}
+
 variable "function_name" {
   description = "A unique name for your Lambda Function."
 }
 
 variable "handler" {
   description = "The function entrypoint in your code."
-}
-
-variable "s3_bucket" {
-  description = "The S3 bucket location containing the function's deployment package. This bucket must reside in the same AWS region where you are creating the Lambda function."
-}
-
-variable "s3_key" {
-  description = "The S3 key of an object containing the function's deployment package."
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -58,6 +54,11 @@ variable "logfilter_destination_arn" {
 variable "memory_size" {
   description = "Amount of memory in MB your Lambda Function can use at runtime. Defaults to 128."
   default     = 128
+}
+
+variable "publish" {
+  description = "Whether to publish creation/change as new Lambda Function Version. Defaults to true."
+  default     = true
 }
 
 variable "runtime" {

@@ -24,10 +24,9 @@ fmt: ## Rewrites config files to canonical format
 validate: ## Validates the Terraform files
 	@echo "+ $@"
 	@AWS_REGION=eu-west-1 terraform validate \
+	-var filename=$(PREFIX)/examples/example-with-cloudwatch-scheduled-event/test_function.zip \
 	-var function_name=test_function \
-	-var handler=handler \
-	-var s3_bucket=bucket \
-	-var s3_key=key
+	-var handler=handler
 
 .PHONY: test
 test: ## Validates and generates execution plan for all examples.
