@@ -2,16 +2,13 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-data "aws_region" "current" {}
-
 module "lambda" {
   source        = "../../"
-  handler       = "example-lambda-func"
-  function_name = "tf-example-go-basic-vpc"
   description   = "Example AWS Lambda inside a VPC using go with cloudwatch scheduled event trigger"
+  filename      = "test_function.zip"
+  function_name = "tf-example-go-basic-vpc"
+  handler       = "example-lambda-func"
   runtime       = "go1.x"
-  s3_bucket     = "tf-example-lambda-func-deployment-${data.aws_region.current.name}"
-  s3_key        = "v0.1.0/example-lambda-func.zip"
 
   vpc_config {
     subnet_ids         = ["subnet-123456", "subnet-123457"]

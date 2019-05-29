@@ -4,10 +4,9 @@ provider "aws" {
 
 module "lambda" {
   source        = "../../"
-  handler       = "some-handler"
-  function_name = "handler"
-  s3_bucket     = "some-bucket"
-  s3_key        = "v1.0.0/handler.zip"
+  filename      = "test_function.zip"
+  function_name = "my-function"
+  handler       = "my-handler"
 
   event {
     type                    = "dynamodb"

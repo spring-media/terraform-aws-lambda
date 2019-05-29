@@ -1,15 +1,15 @@
 module "lambda" {
   source        = "./modules/lambda"
-  function_name = "${var.function_name}"
   description   = "${var.description}"
-  s3_bucket     = "${var.s3_bucket}"
-  s3_key        = "${var.s3_key}"
-  runtime       = "${var.runtime}"
-  handler       = "${var.handler}"
-  timeout       = "${var.timeout}"
-  memory_size   = "${var.memory_size}"
-  tags          = "${var.tags}"
   environment   = "${var.environment}"
+  filename      = "${var.filename}"
+  function_name = "${var.function_name}"
+  handler       = "${var.handler}"
+  memory_size   = "${var.memory_size}"
+  publish       = "${var.publish}"
+  runtime       = "${var.runtime}"
+  timeout       = "${var.timeout}"
+  tags          = "${var.tags}"
   vpc_config    = "${var.vpc_config}"
 }
 
