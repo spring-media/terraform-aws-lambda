@@ -70,33 +70,3 @@ This Module follows the principles of [Semantic Versioning](http://semver.org/).
 During initial development, the major version will be 0 (e.g., `0.x.y`), which indicates the code does not yet have a
 stable API. Once we hit `1.0.0`, we will make every effort to maintain a backwards compatible API and use the MAJOR,
 MINOR, and PATCH versions on each release to indicate any incompatibilities.
-
-## Inputs
-
-| Name                      | Description                                                                                                                                                                                                                                 |  Type  |  Default  | Required |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----: | :-------: | :------: |
-| description               | Description of what your Lambda Function does.                                                                                                                                                                                              | string |   `""`    |    no    |
-| environment               | Environment variables are key-value pairs and enable you to dynamically pass settings to your function code and libraries                                                                                                                   |  map   |  `<map>`  |    no    |
-| event                     | Event source configuration which triggers the Lambda function. Supported events: Scheduled Events, DynamoDb.                                                                                                                                |  map   |  `<map>`  |    no    |
-| filename                  | The path to the function's deployment package within the local filesystem.                                                                                                                                                                  | string |    n/a    |   yes    |
-| function_name             | A unique name for your Lambda Function.                                                                                                                                                                                                     | string |    n/a    |   yes    |
-| handler                   | The function entrypoint in your code.                                                                                                                                                                                                       | string |    n/a    |   yes    |
-| kms_key_arn               | The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters.                                                                                                                                                    | string |   `""`    |    no    |
-| log_retention_in_days     | Specifies the number of days you want to retain log events in the specified log group. Defaults to 14.                                                                                                                                      | string |  `"14"`   |    no    |
-| logfilter_destination_arn | The ARN of the destination to deliver matching log events to. Kinesis stream or Lambda function ARN.                                                                                                                                        | string |   `""`    |    no    |
-| memory_size               | Amount of memory in MB your Lambda Function can use at runtime. Defaults to 128.                                                                                                                                                            | string |  `"128"`  |    no    |
-| publish                   | Whether to publish creation/change as new Lambda Function Version. Defaults to true.                                                                                                                                                        | string | `"true"`  |    no    |
-| runtime                   | The runtime environment for the Lambda function you are uploading. Defaults to go1.x                                                                                                                                                        | string | `"go1.x"` |    no    |
-| ssm_parameter_names       | List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well.                                                                  |  list  | `<list>`  |    no    |
-| tags                      | A mapping of tags to assign to the Lambda function.                                                                                                                                                                                         |  map   |  `<map>`  |    no    |
-| timeout                   | The amount of time your Lambda Function has to run in seconds. Defaults to 3.                                                                                                                                                               | string |   `"3"`   |    no    |
-| vpc_config                | Provide this to allow your function to access your VPC (if both 'subnet_ids' and 'security_group_ids' are empty then vpc_config is considered to be empty or unset, see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html for details). |  map   |  `<map>`  |    no    |
-
-## Outputs
-
-| Name          | Description                                                                                                        |
-| ------------- | ------------------------------------------------------------------------------------------------------------------ |
-| arn           | The Amazon Resource Name (ARN) identifying your Lambda Function.                                                   |
-| function_name | The unique name of your Lambda Function.                                                                           |
-| invoke_arn    | The ARN to be used for invoking Lambda Function from API Gateway - to be used in aws_api_gateway_integration's uri |
-| role_name     | The name of the IAM role attached to the Lambda Function.                                                          |
