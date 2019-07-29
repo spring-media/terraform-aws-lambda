@@ -87,6 +87,7 @@ data "aws_iam_policy_document" "ssm_policy_document" {
   statement {
     actions = [
       "ssm:GetParameters",
+      "ssm:GetParametersByPath",
     ]
 
     resources = [
