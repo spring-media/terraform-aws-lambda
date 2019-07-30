@@ -1,6 +1,6 @@
 # AWS Lambda Terraform module
 
-[![Build Status](https://travis-ci.com/spring-media/terraform-aws-lambda.svg?branch=master)](https://travis-ci.com/spring-media/terraform-aws-lambda) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-3.0.3-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/3.0.3) ![Terraform Version](https://img.shields.io/badge/Terraform-0.11.14-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.com/spring-media/terraform-aws-lambda.svg?branch=master)](https://travis-ci.com/spring-media/terraform-aws-lambda) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-3.1.0-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/3.1.0) ![Terraform Version](https://img.shields.io/badge/Terraform-0.11.14-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources with configurable event sources, IAM configuration, VPC as well as SSM/KMS and log streaming support.
 
@@ -28,7 +28,7 @@ provider "aws" {
 
 module "lambda" {
   source        = "spring-media/lambda/aws"
-  version       = "3.0.3"
+  version       = "3.1.0"
   filename      = "my-package.zip"
   function_name = "my-function"
   handler       = "my-handler"
