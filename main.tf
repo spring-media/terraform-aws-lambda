@@ -14,21 +14,30 @@ module "lambda" {
 }
 
 module "event-cloudwatch-scheduled-event" {
-  enable = "${lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? 1 : 0}"
   source = "./modules/event/cloudwatch-scheduled-event"
+  enable = "${lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? 1 : 0}"
 
   lambda_function_arn = "${module.lambda.arn}"
   schedule_expression = "${lookup(var.event, "schedule_expression", "")}"
 }
 
 module "event-dynamodb" {
-  enable = "${lookup(var.event, "type", "") == "dynamodb" ? 1 : 0}"
   source = "./modules/event/dynamodb"
+  enable = "${lookup(var.event, "type", "") == "dynamodb" ? 1 : 0}"
 
   function_name           = "${module.lambda.function_name}"
   iam_role_name           = "${module.lambda.role_name}"
   stream_event_source_arn = "${lookup(var.event, "stream_event_source_arn", "")}"
   table_name              = "${lookup(var.event, "table_name", "")}"
+}
+
+module "event-sns" {
+  source = "./modules/event/sns"
+  enable = "${lookup(var.event, "type", "") == "sns" ? 1 : 0}"
+
+  endpoint      = "${module.lambda.arn}"
+  function_name = "${module.lambda.function_name}"
+  topic_arn     = "${lookup(var.event, "topic_arn", "")}"
 }
 
 data "aws_iam_policy_document" "cloudwatch_logs" {
