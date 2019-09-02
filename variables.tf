@@ -25,9 +25,11 @@ variable "description" {
 }
 
 variable "environment" {
-  description = "Environment variables are key-value pairs and enable you to dynamically pass settings to your function code and libraries"
-  type        = map(string)
-  default     = {}
+  description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
+  type = object({
+    variables = map(string)
+  })
+  default = null
 }
 
 variable "event" {
@@ -74,7 +76,7 @@ variable "ssm_parameter_names" {
 variable "tags" {
   description = "A mapping of tags to assign to the Lambda function."
   type        = map(string)
-  default     = {}
+  default     = null
 }
 
 variable "timeout" {
