@@ -10,17 +10,17 @@ module "lambda" {
   handler       = "example-lambda-func"
   runtime       = "go1.x"
 
-  event {
+  event = {
     type                = "cloudwatch-scheduled-event"
     schedule_expression = "rate(1 minute)"
   }
 
-  tags {
+  tags = {
     key = "value"
   }
 
-  environment {
-    variables {
+  environment = {
+    variables = {
       key = "value"
     }
   }

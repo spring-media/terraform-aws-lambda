@@ -1,6 +1,7 @@
 variable "enable" {
   description = "Conditionally enables this module (and all it's ressources)."
-  default     = 0
+  type        = bool
+  default     = false
 }
 
 variable "iam_role_name" {
@@ -27,3 +28,4 @@ variable "table_name" {
   description = "The name of the DynamoDb table providing the stream."
   default     = ""
 }
+

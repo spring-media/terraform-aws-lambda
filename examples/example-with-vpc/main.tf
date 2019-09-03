@@ -10,23 +10,24 @@ module "lambda" {
   handler       = "example-lambda-func"
   runtime       = "go1.x"
 
-  vpc_config {
+  vpc_config = {
     subnet_ids         = ["subnet-123456", "subnet-123457"]
     security_group_ids = ["sg-123456"]
   }
 
-  event {
+  event = {
     type                = "cloudwatch-scheduled-event"
     schedule_expression = "rate(1 minute)"
   }
 
-  tags {
+  tags = {
     key = "value"
   }
 
-  environment {
-    variables {
+  environment = {
+    variables = {
       key = "value"
     }
   }
 }
+

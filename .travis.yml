@@ -1,6 +1,6 @@
 env:
   global:
-    - tf_version=0.11.14
+    - tf_version=0.12.7
 
 before_install:
   - wget https://releases.hashicorp.com/terraform/${tf_version}/terraform_${tf_version}_linux_amd64.zip -O /tmp/terraform.zip

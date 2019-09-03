@@ -25,15 +25,17 @@ variable "description" {
 }
 
 variable "environment" {
-  description = "Environment variables are key-value pairs and enable you to dynamically pass settings to your function code and libraries"
-  type        = "map"
-  default     = {}
+  description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
+  type = object({
+    variables = map(string)
+  })
+  default = null
 }
 
 variable "event" {
   description = "Event source configuration which triggers the Lambda function. Supported events: Scheduled Events, DynamoDb."
-  type        = "map"
-  default     = {}
+  type        = map(string)
+  default     = null
 }
 
 variable "kms_key_arn" {
@@ -73,8 +75,8 @@ variable "ssm_parameter_names" {
 
 variable "tags" {
   description = "A mapping of tags to assign to the Lambda function."
-  type        = "map"
-  default     = {}
+  type        = map(string)
+  default     = null
 }
 
 variable "timeout" {
@@ -84,10 +86,9 @@ variable "timeout" {
 
 variable "vpc_config" {
   description = "Provide this to allow your function to access your VPC (if both 'subnet_ids' and 'security_group_ids' are empty then vpc_config is considered to be empty or unset, see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html for details)."
-  type        = "map"
-
-  default = {
-    security_group_ids = []
-    subnet_ids         = []
-  }
+  type = object({
+    security_group_ids = list(string)
+    subnet_ids         = list(string)
+  })
+  default = null
 }
