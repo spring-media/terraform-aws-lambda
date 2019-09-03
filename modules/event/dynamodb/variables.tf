@@ -27,3 +27,4 @@ variable "table_name" {
   description = "The name of the DynamoDb table providing the stream."
   default     = ""
 }
+

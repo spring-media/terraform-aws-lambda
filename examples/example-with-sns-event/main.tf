@@ -10,18 +10,19 @@ module "lambda" {
   handler       = "example-lambda-func"
   runtime       = "go1.x"
 
-  event {
+  event = {
     type      = "sns"
-    topic_arn = "arn:aws:sns:eu-west-1:123456789:test-topic"
+    topic_arn = "arn:aws:sns:eu-west-1:123456789123:test-topic"
   }
 
-  tags {
+  tags = {
     key = "value"
   }
 
-  environment {
-    variables {
+  environment = {
+    variables = {
       key = "value"
     }
   }
 }
+

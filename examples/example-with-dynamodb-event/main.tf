@@ -8,7 +8,7 @@ module "lambda" {
   function_name = "my-function"
   handler       = "my-handler"
 
-  event {
+  event = {
     type                    = "dynamodb"
     stream_event_source_arn = "arn:aws:dynamodb:eu-west-1:647379381847:table/some-table/stream/some-identifier"
     table_name              = "some-table"
@@ -21,7 +21,8 @@ module "lambda" {
   # optionally create a log subscription for streaming log events
   logfilter_destination_arn = "arn:aws:lambda:eu-west-1:647379381847:function:cloudwatch_logs_to_es_production"
 
-  tags {
+  tags = {
     key = "value"
   }
 }
+

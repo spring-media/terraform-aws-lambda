@@ -10,3 +10,4 @@ variable "lambda_function_arn" {
 variable "schedule_expression" {
   description = "Scheduling expression for triggering the Lambda Function using CloudWatch events. For example, cron(0 20 * * ? *) or rate(5 minutes)."
 }
+

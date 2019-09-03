@@ -43,7 +43,7 @@ resource "aws_iam_role" "lambda" {
 }
 
 resource "aws_iam_role_policy_attachment" "vpc_attachment" {
-  count = length(var.vpc_config["security_group_ids"]) > 0 && length(var.vpc_config["subnet_ids"]) > 0 ? 1 : 0
+  count = var.vpc_config == null ? 0 : 1
   role  = aws_iam_role.lambda.name
 
   // see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html
