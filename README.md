@@ -18,9 +18,9 @@ Furthermore this module supports:
 ## Terraform version compatibility
 
 | module | terraform | branch |
-|:-:|:-:|:-:|:-:|
-| 4.x.x| 0.12.x| master |
-| 3.x.x| 0.11.x| terraform_0.11x |
+|:-:	|:-:	|---	|
+| 4.x.x | 0.12.x | master |
+| 3.x.x | 0.11.x | terraform_0.11x |
 
 ## How do I use this module?
 
