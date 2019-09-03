@@ -15,7 +15,7 @@ module "lambda" {
 
 module "event-cloudwatch-scheduled-event" {
   source = "./modules/event/cloudwatch-scheduled-event"
-  enable = lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? 1 : 0
+  enable = lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? true : false
 
   lambda_function_arn = module.lambda.arn
   schedule_expression = lookup(var.event, "schedule_expression", "")
@@ -23,7 +23,7 @@ module "event-cloudwatch-scheduled-event" {
 
 module "event-dynamodb" {
   source = "./modules/event/dynamodb"
-  enable = lookup(var.event, "type", "") == "dynamodb" ? 1 : 0
+  enable = lookup(var.event, "type", "") == "dynamodb" ? true : false
 
   function_name           = module.lambda.function_name
   iam_role_name           = module.lambda.role_name
@@ -33,7 +33,7 @@ module "event-dynamodb" {
 
 module "event-sns" {
   source = "./modules/event/sns"
-  enable = lookup(var.event, "type", "") == "sns" ? 1 : 0
+  enable = lookup(var.event, "type", "") == "sns" ? true : false
 
   endpoint      = module.lambda.arn
   function_name = module.lambda.function_name
@@ -143,6 +143,6 @@ resource "aws_iam_policy" "kms_policy" {
 resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
   count      = var.kms_key_arn != "" ? 1 : 0
   role       = module.lambda.role_name
-  policy_arn = aws_iam_policy.kms_policy[0].arn
+  policy_arn = aws_iam_policy.kms_policy[count.index].arn
 }
 

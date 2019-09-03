@@ -1,6 +1,7 @@
 variable "enable" {
   description = "Conditionally enables this module (and all it's ressources)."
-  default     = 0
+  type        = bool
+  default     = false
 }
 
 variable "endpoint" {
