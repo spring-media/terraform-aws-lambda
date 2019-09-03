@@ -4,7 +4,7 @@ Creates an AWS Lambda function inside a VPC triggered by a CloudWatch (scheduled
 
 ## requirements
 
-- [Terraform 0.11.12+](https://www.terraform.io/)
+- [Terraform 0.12+](https://www.terraform.io/)
 - authentication configuration for the [aws provider](https://www.terraform.io/docs/providers/aws/)
 
 ## usage
