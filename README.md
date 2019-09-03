@@ -15,6 +15,13 @@ Furthermore this module supports:
 - reading configuration and secrets from [AWS Systems Manager Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html) including decryption of [SecureString](https://docs.aws.amazon.com/kms/latest/developerguide/services-parameter-store.html) parameters
 - [CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html) Log group configuration including retention time and [subscription filters](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html) e.g. to stream logs via Lambda to Elasticsearch
 
+## Terraform version compatibility
+
+| module | terraform | branch |
+|:-:|:-:|:-:|:-:|
+| 4.x.x| 0.12.x| master |
+| 3.x.x| 0.11.x| terraform_0.11x |
+
 ## How do I use this module?
 
 The default configuration of this module is optimized for the `go1.x`runtime, but it can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda.
@@ -34,23 +41,31 @@ module "lambda" {
   handler       = "my-handler"
 
 
-  // configurable event trigger
-  event {
+  // configurable event trigger, see examples
+  event = {
     type                = "cloudwatch-scheduled-event"
     schedule_expression = "rate(1 minute)"
   }
 
-  environment {
+  // optionally set environment configuration
+  environment = {
     variables {
       loglevel = "INFO"
     }
   }
 
   // optionally enable VPC access
-  vpc_config {
+  vpc_config = {
     security_group_ids = ["sg-1"]
     subnet_ids         = ["subnet-1", "subnet-2"]
   }
+  
+  # optionally configure Parameter Store access with decryption
+  ssm_parameter_names = ["some/config/root/*"]
+  kms_key_arn         = "arn:aws:kms:eu-west-1:647379381847:key/f79f2b-04684-4ad9-f9de8a-79d72f"
+  
+  # optionally create a log subscription for streaming log events from CloudWatch to ElasticSearch
+  logfilter_destination_arn = "arn:aws:lambda:eu-west-1:647379381847:function:cloudwatch_logs_to_es_production"
 }
 ```
 
