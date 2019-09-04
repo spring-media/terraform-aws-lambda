@@ -4,7 +4,7 @@ provider "aws" {
 
 module "lambda" {
   source        = "../../"
-  filename      = "test_function.zip"
+  filename      = "${path.module}/test_function.zip"
   function_name = "my-function"
   handler       = "my-handler"
 

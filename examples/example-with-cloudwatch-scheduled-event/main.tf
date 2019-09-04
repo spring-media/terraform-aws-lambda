@@ -5,7 +5,7 @@ provider "aws" {
 module "lambda" {
   source        = "../../"
   description   = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
-  filename      = "test_function.zip"
+  filename      = "${path.module}/test_function.zip"
   function_name = "tf-example-go-basic"
   handler       = "example-lambda-func"
   runtime       = "go1.x"

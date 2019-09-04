@@ -4,16 +4,11 @@ provider "aws" {
 
 module "lambda" {
   source        = "../../"
-  description   = "Example AWS Lambda using go with sns trigger"
+  description   = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
   filename      = "${path.module}/test_function.zip"
-  function_name = "tf-example-go-sns"
+  function_name = "tf-example-go-basic"
   handler       = "example-lambda-func"
   runtime       = "go1.x"
-
-  event = {
-    type      = "sns"
-    topic_arn = "arn:aws:sns:eu-west-1:123456789123:test-topic"
-  }
 
   tags = {
     key = "value"
@@ -25,4 +20,3 @@ module "lambda" {
     }
   }
 }
-

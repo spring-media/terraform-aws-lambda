@@ -32,11 +32,10 @@ validate: ## Validates the Terraform files
 test: ## Validates and generates execution plan for all examples.
 	@echo "+ $@"	
 	@for dir in `ls $(EXAMPLES_DIR)`; do \
-		cd $(PREFIX)/$(EXAMPLES_DIR)/$$dir; \
-		terraform init > /dev/null; \
-		terraform validate; \
-		terraform plan > /dev/null; \
-		echo "√ $$dir"; \
+		echo "--> $$dir"; \
+		terraform init $(PREFIX)/$(EXAMPLES_DIR)/$$dir/ > /dev/null; \
+		terraform validate $(PREFIX)/$(EXAMPLES_DIR)/$$dir/; \
+		terraform plan $(PREFIX)/$(EXAMPLES_DIR)/$$dir/ > /dev/null; \
 		rm -rf $(PREFIX)/$(EXAMPLES_DIR)/$$dir/.terraform; \
 	done
 

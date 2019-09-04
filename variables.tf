@@ -35,7 +35,7 @@ variable "environment" {
 variable "event" {
   description = "Event source configuration which triggers the Lambda function. Supported events: Scheduled Events, DynamoDb."
   type        = map(string)
-  default     = null
+  default     = {}
 }
 
 variable "kms_key_arn" {
