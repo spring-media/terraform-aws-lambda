@@ -1,4 +1,4 @@
-# Example with no event
+# Example without event
 
 Creates an AWS Lambda function without an event trigger.
 
