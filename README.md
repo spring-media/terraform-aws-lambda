@@ -17,10 +17,10 @@ Furthermore this module supports:
 
 ## Terraform version compatibility
 
-| module | terraform | branch |
-|:-:	|:-:	|---	|
-| 4.x.x | 0.12.x | master |
-| 3.x.x | 0.11.x | terraform_0.11x |
+| module | terraform | branch          |
+| :----: | :-------: | --------------- |
+| 4.x.x  |  0.12.x   | master          |
+| 3.x.x  |  0.11.x   | terraform_0.11x |
 
 ## How do I use this module?
 
@@ -59,11 +59,11 @@ module "lambda" {
     security_group_ids = ["sg-1"]
     subnet_ids         = ["subnet-1", "subnet-2"]
   }
-  
+
   # optionally configure Parameter Store access with decryption
   ssm_parameter_names = ["some/config/root/*"]
   kms_key_arn         = "arn:aws:kms:eu-west-1:647379381847:key/f79f2b-04684-4ad9-f9de8a-79d72f"
-  
+
   # optionally create a log subscription for streaming log events from CloudWatch to ElasticSearch
   logfilter_destination_arn = "arn:aws:lambda:eu-west-1:647379381847:function:cloudwatch_logs_to_es_production"
 }
@@ -75,6 +75,7 @@ module "lambda" {
 - [example-with-dynamodb-event-source](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event)
 - [example-with-sns-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-sns-event)
 - [example-with-vpc](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-vpc)
+- [example-without-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-without-event)
 
 ## How do I contribute to this module?
 
