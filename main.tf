@@ -40,30 +40,6 @@ module "event-sns" {
   topic_arn     = lookup(var.event, "topic_arn", "")
 }
 
-data "aws_iam_policy_document" "cloudwatch_logs" {
-  statement {
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = [
-      "arn:aws:logs:*:*:*",
-    ]
-  }
-}
-
-resource "aws_iam_policy" "cloudwatch_logs_policy" {
-  name        = "${module.lambda.function_name}-cloudwatch-logs"
-  description = "Provides minimum CloudWatch Logs permissions for ${module.lambda.function_name}."
-  policy      = data.aws_iam_policy_document.cloudwatch_logs.json
-}
-
-resource "aws_iam_role_policy_attachment" "cloudwatch_logs_policy_attachment" {
-  role       = module.lambda.function_name
-  policy_arn = aws_iam_policy.cloudwatch_logs_policy.arn
-}
-
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${module.lambda.function_name}"
   retention_in_days = var.log_retention_in_days

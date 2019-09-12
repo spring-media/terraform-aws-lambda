@@ -42,6 +42,11 @@ resource "aws_iam_role" "lambda" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 resource "aws_iam_role_policy_attachment" "vpc_attachment" {
   count = var.vpc_config == null ? 0 : 1
   role  = aws_iam_role.lambda.name
@@ -49,4 +54,3 @@ resource "aws_iam_role_policy_attachment" "vpc_attachment" {
   // see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
-
