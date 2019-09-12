@@ -1,6 +1,6 @@
 # AWS Lambda Terraform module
 
-[![Build Status](https://travis-ci.com/spring-media/terraform-aws-lambda.svg?branch=master)](https://travis-ci.com/spring-media/terraform-aws-lambda) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-4.0.1-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/4.0.1) ![Terraform Version](https://img.shields.io/badge/Terraform-0.12.7-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.com/spring-media/terraform-aws-lambda.svg?branch=master)](https://travis-ci.com/spring-media/terraform-aws-lambda) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-4.0.1-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/4.0.1) ![Terraform Version](https://img.shields.io/badge/Terraform-0.12.8-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources with configurable event sources, IAM configuration, VPC as well as SSM/KMS and log streaming support.
 
@@ -17,9 +17,9 @@ Furthermore this module supports:
 
 ## Terraform version compatibility
 
-| module | terraform | branch          |
-| :----: | :-------: | --------------- |
-| 4.x.x  |  0.12.x   | master          |
+| module | terraform |     branch      |
+| :----: | :-------: | :-------------: |
+| 4.x.x  |  0.12.x   |     master      |
 | 3.x.x  |  0.11.x   | terraform_0.11x |
 
 ## How do I use this module?
