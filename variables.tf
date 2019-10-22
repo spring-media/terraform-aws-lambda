@@ -27,10 +27,8 @@ variable "description" {
 
 variable "environment" {
   description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
-  type = object({
-    variables = map(string)
-  })
-  default = null
+  type        = map(map(string))
+  default     = {}
 }
 
 variable "event" {

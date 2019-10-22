@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "lambda" {
   description = var.description
   dynamic "environment" {
-    for_each = var.environment == null ? [] : [var.environment]
+    for_each = length(var.environment) < 1 ? [] : [var.environment]
     content {
       variables = environment.value.variables
     }
