@@ -23,6 +23,7 @@ variable "runtime" {
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.
 # ---------------------------------------------------------------------------------------------------------------------
+
 variable "description" {
   description = "Description of what your Lambda Function does."
   default     = ""
@@ -49,7 +50,7 @@ variable "publish" {
 variable "tags" {
   description = "A mapping of tags to assign to the Lambda function."
   type        = map(string)
-  default     = null
+  default     = {}
 }
 
 variable "timeout" {
