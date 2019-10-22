@@ -9,14 +9,4 @@ module "lambda" {
   function_name = "tf-example-go-basic"
   handler       = "example-lambda-func"
   runtime       = "go1.x"
-
-  tags = {
-    key = "value"
-  }
-
-  environment = {
-    variables = {
-      key = "value"
-    }
-  }
 }
