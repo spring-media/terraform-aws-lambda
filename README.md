@@ -8,6 +8,7 @@ The following [event sources](https://docs.aws.amazon.com/lambda/latest/dg/invok
 
 - `cloudwatch-scheduled-event`: configures a [CloudWatch Event Rule](https://www.terraform.io/docs/providers/aws/r/cloudwatch_event_rule.html) to trigger the Lambda on a regular, scheduled basis
 - `dynamodb`: configures an [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html) to trigger the Lambda by DynamoDb events
+- `s3`: configures permission to trigger the Lambda by S3
 - `sns`: to trigger Lambda by [SNS Topic Subscription](https://www.terraform.io/docs/providers/aws/r/sns_topic_subscription.html)
 
 Furthermore this module supports:
@@ -73,6 +74,7 @@ module "lambda" {
 
 - [example-with-cloudwatch-scheduled-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-scheduled-event)
 - [example-with-dynamodb-event-source](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event)
+- [example-with-s3-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-s3-event)
 - [example-with-sns-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-sns-event)
 - [example-with-vpc](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-vpc)
 - [example-without-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-without-event)

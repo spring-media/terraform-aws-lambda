@@ -40,6 +40,15 @@ module "event-sns" {
   topic_arn     = lookup(var.event, "topic_arn", "")
 }
 
+module "event-s3" {
+  source = "./modules/event/s3"
+  enable = lookup(var.event, "type", "") == "s3" ? true : false
+
+  lambda_function_arn = module.lambda.arn
+  s3_bucket_arn       = lookup(var.event, "s3_bucket_arn", "")
+  s3_bucket_id        = lookup(var.event, "s3_bucket_id", "")
+}
+
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${module.lambda.function_name}"
   retention_in_days = var.log_retention_in_days
