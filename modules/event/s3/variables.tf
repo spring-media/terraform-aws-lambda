@@ -25,10 +25,3 @@ variable "enable" {
   type        = bool
   default     = false
 }
-
-variable "lambda_function_notification" {
-  description = "(multiple) Used to configure notifications to a Lambda Function. See https://www.terraform.io/docs/providers/aws/r/s3_bucket_notification.html#lambda_function for allowed values."
-  type        = list(map(string))
-  default     = []
-}
-
