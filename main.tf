@@ -1,16 +1,17 @@
 module "lambda" {
-  source        = "./modules/lambda"
-  description   = var.description
-  environment   = var.environment
-  filename      = var.filename
-  function_name = var.function_name
-  handler       = var.handler
-  memory_size   = var.memory_size
-  publish       = var.publish
-  runtime       = var.runtime
-  timeout       = var.timeout
-  tags          = var.tags
-  vpc_config    = var.vpc_config
+  source                         = "./modules/lambda"
+  description                    = var.description
+  environment                    = var.environment
+  filename                       = var.filename
+  function_name                  = var.function_name
+  handler                        = var.handler
+  memory_size                    = var.memory_size
+  publish                        = var.publish
+  reserved_concurrent_executions = var.reserved_concurrent_executions
+  runtime                        = var.runtime
+  timeout                        = var.timeout
+  tags                           = var.tags
+  vpc_config                     = var.vpc_config
 }
 
 module "event-cloudwatch-scheduled-event" {

@@ -6,16 +6,17 @@ resource "aws_lambda_function" "lambda" {
       variables = environment.value.variables
     }
   }
-  filename         = var.filename
-  function_name    = var.function_name
-  handler          = var.handler
-  memory_size      = var.memory_size
-  publish          = var.publish
-  role             = aws_iam_role.lambda.arn
-  runtime          = var.runtime
-  source_code_hash = filebase64sha256(var.filename)
-  tags             = var.tags
-  timeout          = var.timeout
+  filename                       = var.filename
+  function_name                  = var.function_name
+  handler                        = var.handler
+  memory_size                    = var.memory_size
+  publish                        = var.publish
+  reserved_concurrent_executions = var.reserved_concurrent_executions
+  role                           = aws_iam_role.lambda.arn
+  runtime                        = var.runtime
+  source_code_hash               = filebase64sha256(var.filename)
+  tags                           = var.tags
+  timeout                        = var.timeout
 
   dynamic "vpc_config" {
     for_each = length(var.vpc_config) < 1 ? [] : [var.vpc_config]
