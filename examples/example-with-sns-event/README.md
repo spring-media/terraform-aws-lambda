@@ -13,3 +13,12 @@ Creates an AWS Lambda function subscribed to a SNS topic.
 terraform init
 terraform plan
 ```
+
+## bootstrap with func
+
+In case you are using [go](https://golang.org/) for developing your Lambda functions, you can also use [func](https://github.com/spring-media/func) to bootstrap your project and get started quickly:
+
+```
+$ func new example-with-sns -e sns
+$ cd example-with-sns && make init package plan
+```
