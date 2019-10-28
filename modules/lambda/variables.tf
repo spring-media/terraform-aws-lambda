@@ -45,6 +45,11 @@ variable "publish" {
   default     = false
 }
 
+variable "reserved_concurrent_executions" {
+  description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1."
+  default     = "-1"
+}
+
 variable "tags" {
   description = "A mapping of tags to assign to the Lambda function."
   type        = map(string)
