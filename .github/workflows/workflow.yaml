@@ -22,6 +22,12 @@ jobs:
           entrypoint: terraform
           args: init
 
+      - name: Run a Terraform fmt
+        uses: docker://hashicorp/terraform:0.12.13
+        with:
+          entrypoint: terraform
+          args: fmt -check=true
+
       - name: Run a Terraform validate
         uses: docker://hashicorp/terraform:0.12.13
         env:
