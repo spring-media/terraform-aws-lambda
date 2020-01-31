@@ -7,7 +7,8 @@ resource "aws_lambda_event_source_mapping" "stream_source" {
   starting_position = var.starting_position
 }
 
-resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
+resource "aws_iam_role_policy_attachment" "kinesis" {
+  count      = var.enable ? 1 : 0
   role       = var.iam_role_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaKinesisExecutionRole"
 }
