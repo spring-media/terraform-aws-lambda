@@ -32,6 +32,18 @@ module "event-dynamodb" {
   table_name              = lookup(var.event, "table_name", "")
 }
 
+module "event-kinesis" {
+  source = "./modules/event/kinesis"
+  enable = lookup(var.event, "type", "") == "kinesis" ? true : false
+
+  batch_size                   = lookup(var.event, "batch_size", 100)
+  event_source_mapping_enabled = lookup(var.event, "event_source_mapping_enabled", true)
+  function_name                = module.lambda.function_name
+  event_source_arn             = lookup(var.event, "event_source_arn", "")
+  iam_role_name                = module.lambda.role_name
+  starting_position            = lookup(var.event, "starting_position", "TRIM_HORIZON")
+}
+
 module "event-sns" {
   source = "./modules/event/sns"
   enable = lookup(var.event, "type", "") == "sns" ? true : false
