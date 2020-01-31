@@ -15,6 +15,10 @@ variable "event_source_arn" {
   description = "Event source ARN of a Kinesis stream."
 }
 
+variable "stream_name" {
+  description = "Name of the Kinesis stream this Lambda function should be allowed to read records from."
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.

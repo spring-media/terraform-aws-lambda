@@ -11,6 +11,7 @@ module "lambda" {
   event = {
     type             = "kinesis"
     event_source_arn = "arn:aws:kinesis:eu-west-1:647379381847:stream/my-stream"
+    stream_name      = "my-stream"
   }
 
   # optionally configure Parameter Store access with decryption

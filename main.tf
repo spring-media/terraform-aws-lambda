@@ -42,6 +42,7 @@ module "event-kinesis" {
   event_source_arn             = lookup(var.event, "event_source_arn", "")
   iam_role_name                = module.lambda.role_name
   starting_position            = lookup(var.event, "starting_position", "TRIM_HORIZON")
+  stream_name                  = lookup(var.event, "stream_name", "")
 }
 
 module "event-sns" {
