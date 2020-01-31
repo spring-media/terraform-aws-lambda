@@ -26,10 +26,12 @@ module "event-dynamodb" {
   source = "./modules/event/dynamodb"
   enable = lookup(var.event, "type", "") == "dynamodb" ? true : false
 
-  function_name           = module.lambda.function_name
-  iam_role_name           = module.lambda.role_name
-  stream_event_source_arn = lookup(var.event, "stream_event_source_arn", "")
-  table_name              = lookup(var.event, "table_name", "")
+  batch_size                   = lookup(var.event, "batch_size", 100)
+  event_source_mapping_enabled = lookup(var.event, "event_source_mapping_enabled", true)
+  function_name                = module.lambda.function_name
+  event_source_arn             = lookup(var.event, "event_source_arn", "")
+  iam_role_name                = module.lambda.role_name
+  starting_position            = lookup(var.event, "starting_position", "TRIM_HORIZON")
 }
 
 module "event-sns" {

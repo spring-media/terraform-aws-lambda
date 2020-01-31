@@ -11,7 +11,6 @@ module "lambda" {
   event = {
     type                    = "dynamodb"
     stream_event_source_arn = "arn:aws:dynamodb:eu-west-1:647379381847:table/some-table/stream/some-identifier"
-    table_name              = "some-table"
   }
 
   # optionally configure Parameter Store access with decryption
@@ -25,4 +24,3 @@ module "lambda" {
     key = "value"
   }
 }
-
