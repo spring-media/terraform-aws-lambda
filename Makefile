@@ -42,7 +42,7 @@ tag: ## Create a new git tag to prepare to build a release
 	@echo "Run git push origin $(VERSION) to push your new tag to GitHub and trigger a build."
 
 $(SEMBUMP):
-	go install github.com/jessfraz/junk/sembump
+	GO111MODULE=off go get -u github.com/jessfraz/junk/sembump
 
 .PHONY: bump-version
 BUMP := patch
