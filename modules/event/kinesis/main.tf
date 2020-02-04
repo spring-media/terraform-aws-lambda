@@ -1,9 +1,3 @@
-data "aws_region" "current" {
-}
-
-data "aws_caller_identity" "current" {
-}
-
 resource "aws_lambda_event_source_mapping" "stream_source" {
   count             = var.enable ? 1 : 0
   batch_size        = var.batch_size
@@ -13,6 +7,7 @@ resource "aws_lambda_event_source_mapping" "stream_source" {
   starting_position = var.starting_position
 }
 
+// see https://github.com/awslabs/serverless-application-model/blob/develop/samtranslator/policy_templates_data/policy_templates.json
 data "aws_iam_policy_document" "stream_policy_document" {
   statement {
     actions = [
@@ -21,7 +16,9 @@ data "aws_iam_policy_document" "stream_policy_document" {
     ]
 
     resources = [
-      "arn:aws:kinesis:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:stream/*",
+      // extracting 'arn:${Partition}:kinesis:${Region}:${Account}:stream/' from the kinesis stream ARN
+      // see https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonkinesis.html#amazonkinesis-resources-for-iam-policies
+      "${regex("arn.*\\/", var.event_source_arn)}*"
     ]
   }
 
@@ -34,7 +31,7 @@ data "aws_iam_policy_document" "stream_policy_document" {
     ]
 
     resources = [
-      "arn:aws:kinesis:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:stream/${var.stream_name}",
+      var.event_source_arn
     ]
   }
 }
