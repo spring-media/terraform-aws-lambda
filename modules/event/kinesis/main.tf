@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "stream_policy_document" {
     resources = [
       // extracting 'arn:${Partition}:kinesis:${Region}:${Account}:stream/' from the kinesis stream ARN
       // see https://docs.aws.amazon.com/IAM/latest/UserGuide/list_amazonkinesis.html#amazonkinesis-resources-for-iam-policies
-      "${regex("arn.*\\/", var.event_source_arn)}*"
+      length(var.event_source_arn) > 0 ? "${regex("arn.*\\/", var.event_source_arn)}*" : ""
     ]
   }
 
