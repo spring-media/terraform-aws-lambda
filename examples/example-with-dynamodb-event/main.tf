@@ -9,9 +9,8 @@ module "lambda" {
   handler       = "my-handler"
 
   event = {
-    type                    = "dynamodb"
-    stream_event_source_arn = "arn:aws:dynamodb:eu-west-1:647379381847:table/some-table/stream/some-identifier"
-    table_name              = "some-table"
+    type             = "dynamodb"
+    event_source_arn = "arn:aws:dynamodb:eu-west-1:647379381847:table/some-table/stream/some-identifier"
   }
 
   # optionally configure Parameter Store access with decryption

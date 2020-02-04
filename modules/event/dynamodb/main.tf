@@ -1,27 +1,23 @@
-data "aws_region" "current" {
-}
-
-data "aws_caller_identity" "current" {
-}
-
 resource "aws_lambda_event_source_mapping" "stream_source" {
   count             = var.enable ? 1 : 0
-  event_source_arn  = var.stream_event_source_arn
+  batch_size        = var.batch_size
+  enabled           = var.event_source_mapping_enabled
+  event_source_arn  = var.event_source_arn
   function_name     = var.function_name
-  starting_position = var.stream_starting_position
+  starting_position = var.starting_position
 }
 
+// see https://github.com/awslabs/serverless-application-model/blob/develop/samtranslator/policy_templates_data/policy_templates.json
 data "aws_iam_policy_document" "stream_policy_document" {
   statement {
     actions = [
       "dynamodb:DescribeStream",
       "dynamodb:GetShardIterator",
-      "dynamodb:GetRecords",
-      "dynamodb:ListStreams",
+      "dynamodb:GetRecords"
     ]
 
     resources = [
-      "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${var.table_name}/stream/*",
+      var.event_source_arn
     ]
   }
 }
