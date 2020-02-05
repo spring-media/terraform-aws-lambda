@@ -11,6 +11,7 @@ The following [event sources](https://docs.aws.amazon.com/lambda/latest/dg/invok
 - [kinesis](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-kinesis-event): configures an [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html) to trigger the Lambda by Kinesis events
 - [s3](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-s3-event): configures permission to trigger the Lambda by S3
 - [sns](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-sns-event): to trigger Lambda by [SNS Topic Subscription](https://www.terraform.io/docs/providers/aws/r/sns_topic_subscription.html)
+- [sqs](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-sqs-event): configures an [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html) to trigger the Lambda by SQS events
 
 Furthermore this module supports:
 
@@ -78,6 +79,7 @@ module "lambda" {
 - [example-with-kinesis-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-kinesis-event)
 - [example-with-s3-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-s3-event)
 - [example-with-sns-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-sns-event)
+- [example-with-sqs-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-sqs-event)
 - [example-with-vpc](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-vpc)
 - [example-without-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-without-event)
 

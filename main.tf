@@ -46,6 +46,15 @@ module "event-kinesis" {
   starting_position            = lookup(var.event, "starting_position", "TRIM_HORIZON")
 }
 
+module "event-s3" {
+  source = "./modules/event/s3"
+  enable = lookup(var.event, "type", "") == "s3" ? true : false
+
+  lambda_function_arn = module.lambda.arn
+  s3_bucket_arn       = lookup(var.event, "s3_bucket_arn", "")
+  s3_bucket_id        = lookup(var.event, "s3_bucket_id", "")
+}
+
 module "event-sns" {
   source = "./modules/event/sns"
   enable = lookup(var.event, "type", "") == "sns" ? true : false
@@ -55,13 +64,15 @@ module "event-sns" {
   topic_arn     = lookup(var.event, "topic_arn", "")
 }
 
-module "event-s3" {
-  source = "./modules/event/s3"
-  enable = lookup(var.event, "type", "") == "s3" ? true : false
+module "event-sqs" {
+  source = "./modules/event/sqs"
+  enable = lookup(var.event, "type", "") == "sqs" ? true : false
 
-  lambda_function_arn = module.lambda.arn
-  s3_bucket_arn       = lookup(var.event, "s3_bucket_arn", "")
-  s3_bucket_id        = lookup(var.event, "s3_bucket_id", "")
+  batch_size                   = lookup(var.event, "batch_size", 10)
+  event_source_mapping_enabled = lookup(var.event, "event_source_mapping_enabled", true)
+  function_name                = module.lambda.function_name
+  event_source_arn             = lookup(var.event, "event_source_arn", "")
+  iam_role_name                = module.lambda.role_name
 }
 
 resource "aws_cloudwatch_log_group" "lambda" {
