@@ -7,6 +7,7 @@ module "lambda" {
   filename      = "${path.module}/test_function.zip"
   function_name = "my-function"
   handler       = "my-handler"
+  runtime       = "go1.x"
 
   event = {
     type             = "kinesis"
