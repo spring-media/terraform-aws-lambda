@@ -27,7 +27,7 @@ Furthermore this module supports:
 
 ## How do I use this module?
 
-The module can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda (defaults to `go1.x`).
+The module can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda.
 
 In general configure the Lambda function with all required variables and add an (optional) event source (see [variables.tf](https://github.com/spring-media/terraform-aws-lambda/blob/master/variables.tf) for all available options).
 

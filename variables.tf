@@ -15,6 +15,11 @@ variable "handler" {
   description = "The function entrypoint in your code."
 }
 
+variable "runtime" {
+  description = "The runtime environment for the Lambda function you are uploading."
+}
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.
@@ -65,11 +70,6 @@ variable "publish" {
 variable "reserved_concurrent_executions" {
   description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1."
   default     = "-1"
-}
-
-variable "runtime" {
-  description = "The runtime environment for the Lambda function you are uploading. Defaults to go1.x"
-  default     = "go1.x"
 }
 
 variable "ssm_parameter_names" {
