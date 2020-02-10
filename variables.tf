@@ -58,8 +58,8 @@ variable "memory_size" {
 }
 
 variable "publish" {
-  description = "Whether to publish creation/change as new Lambda Function Version. Defaults to true."
-  default     = true
+  description = "Whether to publish creation/change as new Lambda Function Version. Defaults to false."
+  default     = false
 }
 
 variable "reserved_concurrent_executions" {
