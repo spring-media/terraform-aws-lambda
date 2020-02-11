@@ -9,6 +9,11 @@ resource "aws_lambda_permission" "cloudwatch" {
 
 resource "aws_cloudwatch_event_rule" "lambda" {
   count               = var.enable ? 1 : 0
+  description         = var.description
+  event_pattern       = var.event_pattern
+  is_enabled          = var.is_enabled
+  name                = var.name
+  name_prefix         = var.name_prefix
   schedule_expression = var.schedule_expression
 }
 

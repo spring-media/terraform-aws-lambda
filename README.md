@@ -6,7 +6,7 @@ Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/
 
 The following [event sources](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html) are supported (see [examples](#examples)):
 
-- [cloudwatch-scheduled-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-scheduled-event): configures a [CloudWatch Event Rule](https://www.terraform.io/docs/providers/aws/r/cloudwatch_event_rule.html) to trigger the Lambda on a regular, scheduled basis
+- [cloudwatch-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-event): configures a [CloudWatch Event Rule](https://www.terraform.io/docs/providers/aws/r/cloudwatch_event_rule.html) to trigger the Lambda by CloudWatch [event pattern](https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEventsandEventPatterns.html) or on a regular, scheduled basis
 - [dynamodb](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event): configures an [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html) to trigger the Lambda by DynamoDb events
 - [kinesis](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-kinesis-event): configures an [Event Source Mapping](https://www.terraform.io/docs/providers/aws/r/lambda_event_source_mapping.html) to trigger the Lambda by Kinesis events
 - [s3](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-s3-event): configures permission to trigger the Lambda by S3
@@ -46,7 +46,7 @@ module "lambda" {
 
   // configurable event trigger, see examples
   event = {
-    type                = "cloudwatch-scheduled-event"
+    type                = "cloudwatch-event"
     schedule_expression = "rate(1 minute)"
   }
 
@@ -74,7 +74,7 @@ module "lambda" {
 
 ### Examples
 
-- [example-with-cloudwatch-scheduled-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-scheduled-event)
+- [example-with-cloudwatch-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-cloudwatch-event)
 - [example-with-dynamodb-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-dynamodb-event)
 - [example-with-kinesis-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-kinesis-event)
 - [example-with-s3-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-s3-event)
