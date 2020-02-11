@@ -14,11 +14,16 @@ module "lambda" {
   vpc_config                     = var.vpc_config
 }
 
-module "event-cloudwatch-scheduled-event" {
-  source = "./modules/event/cloudwatch-scheduled-event"
-  enable = lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? true : false
+module "event-cloudwatch" {
+  source = "./modules/event/cloudwatch-event"
+  enable = lookup(var.event, "type", "") == "cloudwatch-event" ? true : false
 
   lambda_function_arn = module.lambda.arn
+  description         = lookup(var.event, "description", "")
+  event_pattern       = lookup(var.event, "event_pattern", "")
+  is_enabled          = lookup(var.event, "is_enabled", true)
+  name                = lookup(var.event, "name", null)
+  name_prefix         = lookup(var.event, "name_prefix", null)
   schedule_expression = lookup(var.event, "schedule_expression", "")
 }
 
