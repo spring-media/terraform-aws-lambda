@@ -14,7 +14,7 @@ resource "aws_lambda_function" "lambda" {
   reserved_concurrent_executions = var.reserved_concurrent_executions
   role                           = aws_iam_role.lambda.arn
   runtime                        = var.runtime
-  source_code_hash               = filebase64sha256(var.filename)
+  source_code_hash               = var.source_code_hash
   tags                           = var.tags
   timeout                        = var.timeout
 
