@@ -9,6 +9,9 @@ module "lambda" {
   publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
   runtime                        = var.runtime
+  s3_bucket                      = var.s3_bucket
+  s3_key                         = var.s3_key
+  s3_object_version              = var.s3_object_version
   source_code_hash               = var.source_code_hash
   timeout                        = var.timeout
   tags                           = var.tags

@@ -3,10 +3,6 @@
 # You must provide a value for each of these parameters.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "filename" {
-  description = "The path to the function's deployment package within the local filesystem."
-}
-
 variable "function_name" {
   description = "A unique name for your Lambda Function."
 }
@@ -42,6 +38,11 @@ variable "event" {
   default     = {}
 }
 
+variable "filename" {
+  description = "The path to the function's deployment package within the local filesystem. If defined, The s3_-prefixed options cannot be used."
+  default     = ""
+}
+
 variable "kms_key_arn" {
   description = "The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters."
   default     = ""
@@ -72,14 +73,29 @@ variable "reserved_concurrent_executions" {
   default     = "-1"
 }
 
-variable "ssm_parameter_names" {
-  description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well."
-  default     = []
+variable "s3_bucket" {
+  description = "The S3 bucket location containing the function's deployment package. Conflicts with filename. This bucket must reside in the same AWS region where you are creating the Lambda function."
+  default     = ""
+}
+
+variable "s3_key" {
+  description = " The S3 key of an object containing the function's deployment package. Conflicts with filename."
+  default     = ""
+}
+
+variable "s3_object_version" {
+  description = "The object version containing the function's deployment package. Conflicts with filename."
+  default     = ""
 }
 
 variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key. The usual way to set this is filebase64sha256('file.zip') where 'file.zip' is the local filename of the lambda function source archive."
   default     = ""
+}
+
+variable "ssm_parameter_names" {
+  description = "List of AWS Systems Manager Parameter Store parameters this Lambda will have access to. In order to decrypt secure parameters, a kms_key_arn needs to be provided as well."
+  default     = []
 }
 
 variable "tags" {
