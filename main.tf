@@ -9,6 +9,7 @@ module "lambda" {
   publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
   runtime                        = var.runtime
+  source_code_hash               = var.source_code_hash
   timeout                        = var.timeout
   tags                           = var.tags
   vpc_config                     = var.vpc_config
