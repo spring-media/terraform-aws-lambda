@@ -27,47 +27,71 @@ Furthermore this module supports:
 
 ## How do I use this module?
 
-The module can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda.
+The module can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda. 
 
-In general configure the Lambda function with all required variables and add an (optional) event source (see [variables.tf](https://github.com/spring-media/terraform-aws-lambda/blob/master/variables.tf) for all available options).
+Deployment packages can be specified either directly as a local file (using the `filename` argument) or indirectly via Amazon S3 (using the `s3_bucket`, `s3_key` and `s3_object_versions` arguments), see [documentation](https://www.terraform.io/docs/providers/aws/r/lambda_function.html#specifying-the-deployment-package) for details.
 
-```
+**basic**
+
+```terraform
 provider "aws" {
   region = "eu-west-1"
 }
 
 module "lambda" {
-  source        = "spring-media/lambda/aws"
-  version       = "5.0.0"
-  filename      = "my-package.zip"
-  function_name = "my-function"
-  handler       = "my-handler"
-  runtime       = "go1.x"
+  source           = "spring-media/lambda/aws"
+  version          = "5.0.0"
+  filename         = "my-package.zip"
+  function_name    = "my-function"
+  handler          = "my-handler"
+  runtime          = "go1.x"
+  source_code_hash = filebase64sha256("${path.module}/my-package.zip")
+}
+```
 
-  // configurable event trigger, see examples
+**with event trigger**
+
+```terraform
+module "lambda" {
+  // see above
+  
   event = {
     type                = "cloudwatch-event"
     schedule_expression = "rate(1 minute)"
   }
+}
+```
 
-  // optionally set environment configuration
-  environment = {
-    variables {
-      loglevel = "INFO"
-    }
-  }
+**in a VPC**
 
-  // optionally enable VPC access
+```terraform
+module "lambda" {
+  // see above
+
   vpc_config = {
     security_group_ids = ["sg-1"]
     subnet_ids         = ["subnet-1", "subnet-2"]
   }
+}
+```
 
-  # optionally configure Parameter Store access with decryption
+**with access to parameter store**
+
+```terraform
+module "lambda" {
+  // see above
+
   ssm_parameter_names = ["some/config/root/*"]
   kms_key_arn         = "arn:aws:kms:eu-west-1:647379381847:key/f79f2b-04684-4ad9-f9de8a-79d72f"
+}
+```
 
-  # optionally create a log subscription for streaming log events from CloudWatch to ElasticSearch
+**with log subscription (stream to ElasticSearch)**
+
+```terraform
+module "lambda" {
+  // see above
+
   logfilter_destination_arn = "arn:aws:lambda:eu-west-1:647379381847:function:cloudwatch_logs_to_es_production"
 }
 ```

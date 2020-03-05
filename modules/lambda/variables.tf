@@ -50,6 +50,21 @@ variable "reserved_concurrent_executions" {
   default     = "-1"
 }
 
+variable "s3_bucket" {
+  description = "The S3 bucket location containing the function's deployment package. Conflicts with filename. This bucket must reside in the same AWS region where you are creating the Lambda function."
+  default     = ""
+}
+
+variable "s3_key" {
+  description = " The S3 key of an object containing the function's deployment package. Conflicts with filename."
+  default     = ""
+}
+
+variable "s3_object_version" {
+  description = "The object version containing the function's deployment package. Conflicts with filename."
+  default     = ""
+}
+
 variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key. The usual way to set this is filebase64sha256('file.zip') where 'file.zip' is the local filename of the lambda function source archive."
   default     = ""
