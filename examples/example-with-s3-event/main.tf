@@ -12,12 +12,13 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 }
 
 module "lambda" {
-  source        = "../../"
-  description   = "Example AWS Lambda using go with S3 trigger"
-  filename      = "${path.module}/test_function.zip"
-  function_name = "tf-example-go-s3"
-  handler       = "example-lambda-func"
-  runtime       = "go1.x"
+  source           = "../../"
+  description      = "Example AWS Lambda using go with S3 trigger"
+  filename         = "${path.module}/test_function.zip"
+  function_name    = "tf-example-go-s3"
+  handler          = "example-lambda-func"
+  runtime          = "go1.x"
+  source_code_hash = filebase64sha256("${path.module}/test_function.zip")
 
   event = {
     type          = "s3"

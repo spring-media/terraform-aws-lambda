@@ -3,11 +3,12 @@ provider "aws" {
 }
 
 module "lambda" {
-  source        = "../../"
-  filename      = "${path.module}/test_function.zip"
-  function_name = "my-function"
-  handler       = "my-handler"
-  runtime       = "go1.x"
+  source           = "../../"
+  filename         = "${path.module}/test_function.zip"
+  function_name    = "my-function"
+  handler          = "my-handler"
+  runtime          = "go1.x"
+  source_code_hash = filebase64sha256("${path.module}/test_function.zip")
 
   event = {
     type             = "sqs"

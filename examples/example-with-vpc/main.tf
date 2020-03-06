@@ -3,12 +3,13 @@ provider "aws" {
 }
 
 module "lambda" {
-  source        = "../../"
-  description   = "Example AWS Lambda inside a VPC using go with cloudwatch scheduled event trigger"
-  filename      = "${path.module}/test_function.zip"
-  function_name = "tf-example-go-basic-vpc"
-  handler       = "example-lambda-func"
-  runtime       = "go1.x"
+  source           = "../../"
+  description      = "Example AWS Lambda inside a VPC using go with cloudwatch scheduled event trigger"
+  filename         = "${path.module}/test_function.zip"
+  function_name    = "tf-example-go-basic-vpc"
+  handler          = "example-lambda-func"
+  runtime          = "go1.x"
+  source_code_hash = filebase64sha256("${path.module}/test_function.zip")
 
   vpc_config = {
     subnet_ids         = ["subnet-123456", "subnet-123457"]
