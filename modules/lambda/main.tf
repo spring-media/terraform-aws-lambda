@@ -1,3 +1,6 @@
+data "aws_region" "current" {
+}
+
 resource "aws_lambda_function" "lambda" {
   description = var.description
   dynamic "environment" {
@@ -42,7 +45,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 resource "aws_iam_role" "lambda" {
-  name               = var.function_name
+  name               = "${var.function_name}-${data.aws_region.current.name}"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
