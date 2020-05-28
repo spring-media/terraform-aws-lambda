@@ -1,3 +1,6 @@
+data "aws_region" "current" {
+}
+
 resource "aws_lambda_event_source_mapping" "stream_source" {
   count             = var.enable ? 1 : 0
   batch_size        = var.batch_size
@@ -38,7 +41,7 @@ data "aws_iam_policy_document" "stream_policy_document" {
 
 resource "aws_iam_policy" "stream_policy" {
   count       = var.enable ? 1 : 0
-  name        = "${var.function_name}-stream-consumer"
+  name        = "${var.function_name}-stream-consumer-${data.aws_region.current.name}"
   description = "Gives permission to list and read a Kinesis stream to ${var.function_name}."
   policy      = data.aws_iam_policy_document.stream_policy_document.json
 }
