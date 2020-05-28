@@ -1,3 +1,9 @@
+data "aws_region" "current" {
+}
+
+data "aws_caller_identity" "current" {
+}
+
 module "lambda" {
   source                         = "./modules/lambda"
   description                    = var.description
@@ -107,12 +113,6 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_logs_to_es" {
   distribution    = "ByLogStream"
 }
 
-data "aws_region" "current" {
-}
-
-data "aws_caller_identity" "current" {
-}
-
 data "aws_iam_policy_document" "ssm_policy_document" {
   count = length(var.ssm_parameter_names)
 
@@ -130,7 +130,7 @@ data "aws_iam_policy_document" "ssm_policy_document" {
 
 resource "aws_iam_policy" "ssm_policy" {
   count       = length(var.ssm_parameter_names)
-  name        = "${module.lambda.function_name}-ssm-${count.index}"
+  name        = "${module.lambda.function_name}-ssm-${count.index}-${data.aws_region.current.name}"
   description = "Provides minimum Parameter Store permissions for ${module.lambda.function_name}."
   policy      = data.aws_iam_policy_document.ssm_policy_document[count.index].json
 }
@@ -155,7 +155,7 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
 resource "aws_iam_policy" "kms_policy" {
   count       = var.kms_key_arn != "" ? 1 : 0
-  name        = "${module.lambda.function_name}-kms"
+  name        = "${module.lambda.function_name}-kms-${data.aws_region.current.name}"
   description = "Provides minimum KMS permissions for ${module.lambda.function_name}."
   policy      = data.aws_iam_policy_document.kms_policy_document.json
 }
