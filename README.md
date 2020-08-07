@@ -1,18 +1,18 @@
 # AWS Lambda Terraform module
 
-![](https://github.com/spring-media/terraform-aws-lambda/workflows/Terraform%20CI/badge.svg) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-5.2.0-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/5.2.0) ![Terraform Version](https://img.shields.io/badge/Terraform-0.12+-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![](https://github.com/spring-media/terraform-aws-lambda/workflows/Terraform%20CI/badge.svg) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-5.2.1-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/5.2.1) ![Terraform Version](https://img.shields.io/badge/Terraform-0.12+-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
 # Deprecation warning
 
 Further development of this module will be continued in [moritzzimmer/terraform-aws-lambda](https://github.com/moritzzimmer/terraform-aws-lambda). Users of `spring-media/lambda/aws` 
-should migrate to this module as a drop-in replacement for all provisions up to release/tag `5.2.0` to benefit from new features and bugfixes.
+should migrate to this module as a drop-in replacement for all provisions up to release/tag `5.2.1` to benefit from new features and bugfixes.
 
 ```hcl-terraform
 module "lambda" {
   source           = "moritzzimmer/lambda/aws"
-  version          = "5.2.0"
+  version          = "5.2.1"
   filename         = "my-package.zip"
   function_name    = "my-function"
   handler          = "my-handler"
@@ -62,7 +62,7 @@ provider "aws" {
 
 module "lambda" {
   source           = "spring-media/lambda/aws"
-  version          = "5.2.0"
+  version          = "5.2.1"
   filename         = "my-package.zip"
   function_name    = "my-function"
   handler          = "my-handler"
