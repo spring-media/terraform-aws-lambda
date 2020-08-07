@@ -13,12 +13,3 @@ Creates an AWS Lambda function triggered by a S3 [event](https://docs.aws.amazon
 terraform init
 terraform plan
 ```
-
-## bootstrap with func
-
-In case you are using [go](https://golang.org/) for developing your Lambda functions, you can also use [func](https://github.com/spring-media/func) to bootstrap your project and get started quickly:
-
-```
-$ func new example-with-s3 -e s3
-$ cd example-with-s3 && make init package plan
-```

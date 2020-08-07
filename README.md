@@ -2,6 +2,28 @@
 
 ![](https://github.com/spring-media/terraform-aws-lambda/workflows/Terraform%20CI/badge.svg) [![Terraform Module Registry](https://img.shields.io/badge/Terraform%20Module%20Registry-5.2.0-blue.svg)](https://registry.terraform.io/modules/spring-media/lambda/aws/5.2.0) ![Terraform Version](https://img.shields.io/badge/Terraform-0.12+-green.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+---
+
+# Deprecation warning
+
+Further development of this module will be continued in [moritzzimmer/terraform-aws-lambda](https://github.com/moritzzimmer/terraform-aws-lambda). Users of `spring-media/lambda/aws` 
+should migrate to this module as a drop-in replacement for all provisions up to release/tag `5.2.0` to benefit from new features and bugfixes.
+
+```hcl-terraform
+module "lambda" {
+  source           = "moritzzimmer/lambda/aws"
+  version          = "5.2.0"
+  filename         = "my-package.zip"
+  function_name    = "my-function"
+  handler          = "my-handler"
+  runtime          = "go1.x"
+  source_code_hash = filebase64sha256("${path.module}/my-package.zip")
+}
+``` 
+
+---
+
+
 Terraform module to create AWS [Lambda](https://www.terraform.io/docs/providers/aws/r/lambda_function.html) resources with configurable event sources, IAM configuration (following the [principal of least privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege)), VPC as well as SSM/KMS and log streaming support.
 
 The following [event sources](https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html) are supported (see [examples](#examples)):
@@ -106,10 +128,6 @@ module "lambda" {
 - [example-with-sqs-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-sqs-event)
 - [example-with-vpc](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-with-vpc)
 - [example-without-event](https://github.com/spring-media/terraform-aws-lambda/tree/master/examples/example-without-event)
-
-### bootstrap with func
-
-In case you are using [go](https://golang.org/) for developing your Lambda functions, you can also use [func](https://github.com/spring-media/func) to bootstrap your project and get started quickly.
 
 ## How do I contribute to this module?
 
