@@ -17,6 +17,7 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash               = filebase64sha256(var.filename)
   tags                           = var.tags
   timeout                        = var.timeout
+  layers                         = var.layers
 
   dynamic "vpc_config" {
     for_each = length(var.vpc_config) < 1 ? [] : [var.vpc_config]
