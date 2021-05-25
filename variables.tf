@@ -93,3 +93,9 @@ variable "vpc_config" {
   type        = map(list(string))
   default     = {}
 }
+
+variable "layers" {
+  description = "List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function. See [Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html)"
+  type        = list(string)
+  default     = []
+}
