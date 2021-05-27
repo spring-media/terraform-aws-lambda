@@ -26,6 +26,19 @@ resource "aws_lambda_function" "lambda" {
       subnet_ids         = vpc_config.value.subnet_ids
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      filename,
+      s3_bucket,
+      s3_key,
+      s3_object_version,
+      source_code_hash,
+      version,
+      qualified_arn,
+      last_modified,
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {

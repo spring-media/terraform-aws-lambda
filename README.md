@@ -28,6 +28,7 @@ Furthermore this module supports:
 The module can be used for all [runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html) supported by AWS Lambda (defaults to `go1.x`).
 
 In general configure the Lambda function with all required variables and add an (optional) event source (see [variables.tf](https://github.com/spring-media/terraform-aws-lambda/blob/master/variables.tf) for all available options).
+The function is configured to ignore any changes to the function code so that it can be updated as part of your deployment process.
 
 ```
 provider "aws" {
