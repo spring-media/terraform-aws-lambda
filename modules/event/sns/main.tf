@@ -12,4 +12,11 @@ resource "aws_sns_topic_subscription" "subscription" {
   endpoint  = var.endpoint
   protocol  = "lambda"
   topic_arn = var.topic_arn
+
+  # Note: redrive policy is safe to ignore here because it's unused.
+  # This only prevents subscriptions created _outside_ of module from
+  # having _their_ redrive policy overwritten by this module.
+  lifecycle {
+    ignore_changes = [redrive_policy]
+  }
 }
