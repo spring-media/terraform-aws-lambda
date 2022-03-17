@@ -1,3 +1,27 @@
+
+## var scratchpad
+## required banking vars (generally provided by workspace)
+variable "app_name" {
+  type = string
+  description = "describe your variable"
+}
+variable "environment" {
+  type = string
+  description = "describe your variable"
+}
+## optional vars for RV modules should default but be exposed
+variable "resource_allocation" {
+  type = string
+  description = "(optional) describe your variable"
+  default = "low"
+}
+variable "enable_newrelic" {
+  type = bool
+  description = "(optional) describe your variable"
+  default = false
+}
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
 # You must provide a value for each of these parameters.
@@ -14,6 +38,28 @@ variable "function_name" {
 variable "handler" {
   description = "The function entrypoint in your code."
 }
+
+variable "project" {
+  description = "Name of the project this falls under."
+}
+
+variable "service" {
+  description = "Name of the service this is used in."
+}
+
+variable "owner" {
+  description = "Name of the owner or vertical this belongs to."
+}
+
+variable "team_name" {
+  description = "Name of the team this belongs to."
+}
+
+variable "resource_allocation" {
+  description = "Name of the project this falls under."
+  default = "low"
+}
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS

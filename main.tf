@@ -1,11 +1,12 @@
 module "lambda" {
-  source                         = "./modules/lambda"
+  source                         = "app.terraform.io/Bankrate/lambda-function/aws"
+  version                        = "~> 3.0.0" # Only pull patch/fix releases
   description                    = var.description
   environment                    = var.environment
   filename                       = var.filename
-  function_name                  = var.function_name
+  #function_name                  = var.function_name
   handler                        = var.handler
-  memory_size                    = var.memory_size
+  #memory_size                    = var.memory_size
   publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
   runtime                        = var.runtime
@@ -13,11 +14,26 @@ module "lambda" {
   tags                           = var.tags
   vpc_config                     = var.vpc_config
   layers                         = var.layers
+
+  # additions from RV standard
+  name                = var.function_name
+  project             = var.project_name
+  service             = var.service
+  owner               = var.owner # || vertical
+  team_name           = var.team_name
+  resource_allocation = var.resource_allocation
+
+  # bonus points
+  #create_in_vpc     = var.create_in_vpc
+  #create_default_sg = var.create_default_sg
+  #enable_newrelic = var.enable_newrelic
+  #security_groups = concat(var.security_groups, tolist(aws_security_group.lambda_egress.id))
 }
 
 module "event-cloudwatch-scheduled-event" {
   source = "./modules/event/cloudwatch-scheduled-event"
   enable = lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? true : false
+  architecture = {}
 
   lambda_function_arn = module.lambda.arn
   schedule_expression = lookup(var.event, "schedule_expression", "")
@@ -26,6 +42,7 @@ module "event-cloudwatch-scheduled-event" {
 module "event-dynamodb" {
   source = "./modules/event/dynamodb"
   enable = lookup(var.event, "type", "") == "dynamodb" ? true : false
+  architecture = {}
 
   function_name           = module.lambda.function_name
   iam_role_name           = module.lambda.role_name
@@ -36,6 +53,7 @@ module "event-dynamodb" {
 module "event-sns" {
   source = "./modules/event/sns"
   enable = lookup(var.event, "type", "") == "sns" ? true : false
+  architecture = {}
 
   endpoint      = module.lambda.arn
   function_name = module.lambda.function_name
@@ -45,15 +63,16 @@ module "event-sns" {
 module "event-s3" {
   source = "./modules/event/s3"
   enable = lookup(var.event, "type", "") == "s3" ? true : false
+  architecture = {}
 
   lambda_function_arn = module.lambda.arn
   s3_bucket_arn       = lookup(var.event, "s3_bucket_arn", "")
   s3_bucket_id        = lookup(var.event, "s3_bucket_id", "")
 }
 
-resource "aws_cloudwatch_log_group" "lambda" {
+/* resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${module.lambda.function_name}"
-  retention_in_days = var.log_retention_in_days
+  retention_in_days =  var.log_retention_in_days
 }
 
 resource "aws_lambda_permission" "cloudwatch_logs" {
@@ -131,5 +150,5 @@ resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
   count      = var.kms_key_arn != "" ? 1 : 0
   role       = module.lambda.role_name
   policy_arn = aws_iam_policy.kms_policy[count.index].arn
-}
+} */
 
