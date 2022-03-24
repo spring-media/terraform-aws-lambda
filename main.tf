@@ -1,4 +1,4 @@
-  resource "aws_lambda_function" "lambda" {
+  module "lambda" {
   source                         = "app.terraform.io/Bankrate/lambda-function/aws"
   version                        = "~> 3.0.0" # Only pull patch/fix releases
   description                    = var.description
@@ -12,7 +12,16 @@
   vpc_config                     = var.vpc_config
   layers                         = var.layers
 
+ # additions from RV standard
+  name                = var.function_name
+  project             = var.project_name
+  service             = var.service
+  owner               = var.owner # || vertical
+  team_name           = var.team_name
+  resource_allocation = var.resource_allocation
+
   # Additions from old lambda sub-module
+  /*
   dynamic "environment" {
     for_each = length(var.environment) < 1 ? [] : [var.environment]
     content {
@@ -32,14 +41,7 @@
       subnet_ids         = vpc_config.value.subnet_ids
     }
   }
-
-  # additions from RV standard
-  name                = var.function_name
-  project             = var.project_name
-  service             = var.service
-  owner               = var.owner # || vertical
-  team_name           = var.team_name
-  resource_allocation = var.resource_allocation
+  */
 
   # bonus points
   #create_in_vpc     = var.create_in_vpc
@@ -89,8 +91,7 @@ module "event-cloudwatch-scheduled-event" {
 */
 
 module "lambda_cloudwatch_trigger" {
-  #Github: https://github.com/RedVentures/terraform-aws-lambda-cloudwatch-trigger
-  source  = "app.terraform.io/RVStandard/lambda-cloudwatch-trigger/aws"
+  source  = "app.terraform.io/bankrate/lambda-cloudwatch-trigger/aws"
   version = "~> 4.0"
 
   lambda_function_arn = module.lambda.arn
@@ -113,8 +114,7 @@ module "event-s3" {
 */
 
 module "lambda_s3_trigger" {
-  #Github Link: https://github.com/RedVentures/terraform-aws-lambda-s3-trigger
-  source = "app.terraform.io/RVStandard/lambda-s3-trigger/aws"
+  source = "app.terraform.io/bankrate/lambda-s3-trigger/aws"
   version = "~> 1.0"
 
   bucket_name         = lookup(var.event, "s3_bucket_id", "")
@@ -135,8 +135,7 @@ module "event-dynamodb" {
 */
 
 module "lambda_event_source" {
-  #Github: https://github.com/RedVentures/terraform-aws-lambda-event-source
-  source  = "app.terraform.io/RVStandard/lambda-event-source/aws"
+  source  = "app.terraform.io/bankrate/lambda-event-source/aws"
   version = "~> 2.0"
 
   lambda_function_arn = module.lambda.arn
