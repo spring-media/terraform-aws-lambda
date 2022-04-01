@@ -92,13 +92,20 @@ module "event-cloudwatch-scheduled-event" {
 
 module "lambda_cloudwatch_trigger" {
   source  = "app.terraform.io/bankrate/lambda-cloudwatch-trigger/aws"
-  version = "~> 4.0"
+  version = "~> 4.0.0"
+  
+  # Enablement
+  architecture = var.architecture
+  enable = {
+    enable              = var.enable
+    lambda_function_arn = module.lambda.arn
+    schedule_expression = lookup(var.event, "schedule_expression", "")
+    environment         = var.environment
+    project             = var.project_name
+    owner               = var.owner
+  }
 
-  lambda_function_arn = module.lambda.arn
-  schedule_expression = lookup(var.event, "schedule_expression", "")
-  environment         = var.environment
-  project             = var.project_name
-  owner               = var.owner
+
 }
 
 /*
@@ -115,7 +122,7 @@ module "event-s3" {
 
 module "lambda_s3_trigger" {
   source = "app.terraform.io/bankrate/lambda-s3-trigger/aws"
-  version = "~> 1.0"
+  version = "~> 1.0.0"
 
   bucket_name         = lookup(var.event, "s3_bucket_id", "")
   lambda_function_arn = module.lambda.arn
@@ -134,9 +141,9 @@ module "event-dynamodb" {
 }
 */
 
-module "lambda_event_source" {
+module "lambda_ddb_trigger" {
   source  = "app.terraform.io/bankrate/lambda-event-source/aws"
-  version = "~> 2.0"
+  version = "~> 2.0.0"
 
   lambda_function_arn = module.lambda.arn
   lambda_role_name    = module.lambda.role_name

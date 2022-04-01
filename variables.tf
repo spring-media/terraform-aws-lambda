@@ -21,6 +21,23 @@ variable "enable_newrelic" {
   default = false
 }
 
+#
+## Enablement and Architecture Toggles
+###
+variable architecture {
+  description = "Triggers are not required. Chose which trigger, if any, to use with lambda.  If one is true, all others must be false."
+  type = object({
+    cloudwatch_trigger             = bool
+    s3_trigger                     = bool
+    ddb_trigger                    = bool
+  })
+
+  default = {
+    cloudwatch_trigger             = false
+    s3_trigger                     = false
+    ddb_trigger                    = false
+  }
+}
 
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
