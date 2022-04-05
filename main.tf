@@ -1,6 +1,7 @@
   module "lambda" {
   source                         = "app.terraform.io/Bankrate/lambda-function/aws"
   version                        = "~> 3.0.0" # Only pull patch/fix releases
+  function_name                  = var.function_name
   description                    = var.description
   filename                       = var.filename
   handler                        = var.handler
@@ -11,37 +12,7 @@
   tags                           = var.tags
   vpc_config                     = var.vpc_config
   layers                         = var.layers
-
- # additions from RV standard
-  name                = var.function_name
-  project             = var.project_name
-  service             = var.service
-  owner               = var.owner # || vertical
-  team_name           = var.team_name
-  resource_allocation = var.resource_allocation
-
-  # Additions from old lambda sub-module
-  /*
-  dynamic "environment" {
-    for_each = length(var.environment) < 1 ? [] : [var.environment]
-    content {
-      variables = environment.value.variables
-    }
-  }
-
-  function_name                  = var.function_name
-  memory_size                    = var.memory_size
-  role                           = aws_iam_role.lambda.arn
-  source_code_hash               = filebase64sha256(var.filename)
-
-  dynamic "vpc_config" {
-    for_each = length(var.vpc_config) < 1 ? [] : [var.vpc_config]
-    content {
-      security_group_ids = vpc_config.value.security_group_ids
-      subnet_ids         = vpc_config.value.subnet_ids
-    }
-  }
-  */
+  resource_allocation            = var.resource_allocation
 
   # bonus points
   #create_in_vpc     = var.create_in_vpc
@@ -79,90 +50,44 @@ resource "aws_iam_role_policy_attachment" "vpc_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
-/*
-module "event-cloudwatch-scheduled-event" {
-  source = "./modules/event/cloudwatch-scheduled-event"
-  enable = lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? true : false
-  architecture = {}
-
-  lambda_function_arn = module.lambda.arn
-  schedule_expression = lookup(var.event, "schedule_expression", "")
-}
-*/
-
 module "lambda_cloudwatch_trigger" {
   source  = "app.terraform.io/bankrate/lambda-cloudwatch-trigger/aws"
   version = "~> 4.0.0"
   
   # Enablement
-  enable              = var.enable && var.architecture.cloudwatch_trigger
+  enable              = var.architecture.cloudwatch_trigger
+
   lambda_function_arn = module.lambda.arn
-  schedule_expression = lookup(var.event, "schedule_expression", "")
+  schedule_expression = var.schedule_expression
   environment         = var.environment
   project             = var.project_name
   owner               = var.owner
-
-
 }
-
-/*
-module "event-s3" {
-  source = "./modules/event/s3"
-  enable = lookup(var.event, "type", "") == "s3" ? true : false
-  architecture = {}
-
-  lambda_function_arn = module.lambda.arn
-  s3_bucket_arn       = lookup(var.event, "s3_bucket_arn", "")
-  s3_bucket_id        = lookup(var.event, "s3_bucket_id", "")
-}
-*/
 
 module "lambda_s3_trigger" {
   source = "app.terraform.io/bankrate/lambda-s3-trigger/aws"
   version = "~> 1.0.0"
-  enable              = var.enable && var.architecture.s3_trigger
 
-  bucket_name         = lookup(var.event, "s3_bucket_id", "")
+  # Enablement
+  enable              = var.architecture.s3_trigger
+
+  bucket_id           = var.bucket_id
+  bucket_arn          = var.bucket_arn
   lambda_function_arn = module.lambda.arn
 }
-
-/*
-module "event-dynamodb" {
-  source = "./modules/event/dynamodb"
-  enable = lookup(var.event, "type", "") == "dynamodb" ? true : false
-  architecture = {}
-
-  function_name           = module.lambda.function_name
-  iam_role_name           = module.lambda.role_name
-  stream_event_source_arn = lookup(var.event, "stream_event_source_arn", "")
-  table_name              = lookup(var.event, "table_name", "")
-}
-*/
 
 module "lambda_ddb_trigger" {
   source  = "app.terraform.io/bankrate/lambda-event-source/aws"
   version = "~> 2.0.0"
-    enable              = var.enable && var.architecture.ddb_trigger
 
+  # Enablement
+  enable              = var.architecture.ddb_trigger
 
   lambda_function_arn = module.lambda.arn
   lambda_role_name    = module.lambda.role_name
-  event_source_arn    = lookup(var.event, "stream_event_source_arn", "")
-  event_source_type   = "dynamodb"
+  event_source_arn    = var.event_source_arn
+  table_name          = var.table_name
 }
-
-/*
-module "event-sns" {
-  source = "./modules/event/sns"
-  enable = lookup(var.event, "type", "") == "sns" ? true : false
-  architecture = {}
-
-  endpoint      = module.lambda.arn
-  function_name = module.lambda.function_name
-  topic_arn     = lookup(var.event, "topic_arn", "")
-}
-*/
-
 
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${module.lambda.function_name}"

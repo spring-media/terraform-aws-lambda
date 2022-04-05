@@ -1,14 +1,3 @@
-
-## var scratchpad
-## required banking vars (generally provided by workspace)
-variable "app_name" {
-  type = string
-  description = "describe your variable"
-}
-variable "environment" {
-  type = string
-  description = "describe your variable"
-}
 ## optional vars for RV modules should default but be exposed
 variable "resource_allocation" {
   type = string
@@ -27,12 +16,14 @@ variable "enable_newrelic" {
 variable architecture {
   description = "Triggers are not required. Chose which trigger, if any, to use with lambda.  If one is true, all others must be false."
   type = object({
+    no_trigger                     = bool
     cloudwatch_trigger             = bool
     s3_trigger                     = bool
     ddb_trigger                    = bool
   })
 
   default = {
+    no_trigger                     = true
     cloudwatch_trigger             = false
     s3_trigger                     = false
     ddb_trigger                    = false
@@ -94,10 +85,34 @@ variable "environment" {
   default     = {}
 }
 
-variable "event" {
-  description = "Event source configuration which triggers the Lambda function. Supported events: cloudwatch-scheduled-event, dynamodb, s3, sns"
-  type        = map(string)
-  default     = {}
+variable "schedule_expression" {
+  description = "value"
+  type = string
+  default = "rate(1 minute)"
+}
+
+variable "bucket_arn" {
+  description = "value"
+  type = string
+  default = ""
+}
+
+variable "bucket_id" {
+  description = "value"
+  type = string
+  default = ""
+}
+
+variable "event_source_arn" {
+  description = "value"
+  type = string
+  default = ""
+}
+
+variable "table_name" {
+  description = "value"
+  type = string
+  default = ""
 }
 
 variable "kms_key_arn" {
