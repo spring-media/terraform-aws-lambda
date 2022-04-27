@@ -172,10 +172,21 @@ variable "timeout" {
   default     = 3
 }
 
-variable "vpc_config" {
-  description = "Provide this to allow your function to access your VPC (if both 'subnet_ids' and 'security_group_ids' are empty then vpc_config is considered to be empty or unset, see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html for details)."
-  type        = map(list(string))
-  default     = {}
+variable "create_in_vpc" {
+  description = "By default this is set to true. If you don't want to create the lambda in a VPC then this should be set to false"
+  type = bool
+  default = true
+}
+
+variable "create_default_sg" {
+  description = "By default creates a security group that's unique to your lambda, meaning that every lambda you create with this module will use its own set of ENIs"
+  type = bool
+  default = false
+}
+variable "security_groups" {
+  description = "security groups"
+  type = list(string)
+  default = []
 }
 
 variable "layers" {

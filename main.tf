@@ -10,9 +10,10 @@ module "lambda" {
   layers                         = var.layers
   resource_allocation            = var.resource_allocation
   vpc_tag                        = var.vpc_tag_key_override
-  name                           = ""
-  team_name                      = ""
-  environment                    = "qa"
+  name                           = var.function_name
+  team_name                      = var.team_name
+  environment                    = var.environment
+
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -37,14 +38,6 @@ resource "aws_iam_role" "lambda" {
 resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
   role       = aws_iam_role.lambda.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
-resource "aws_iam_role_policy_attachment" "vpc_attachment" {
-  count = length(var.vpc_config) < 1 ? 0 : 1
-  role  = aws_iam_role.lambda.name
-
-  // see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
 module "lambda_cloudwatch_trigger" {
