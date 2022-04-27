@@ -17,7 +17,7 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 
 module "lambda" {
   source        = "../../"
-  description   = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
+  description   = "Example AWS Lambda using go with s3 event trigger"
   filename      = "${path.module}/test_function.zip"
   function_name = "tf-example-go-basic"
   handler       = "example-lambda-func"
