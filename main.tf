@@ -1,16 +1,16 @@
   module "lambda" {
-  source                         = "app.terraform.io/Bankrate/lambda-function/aws"
+  source                         = "app.terraform.io/bankrate/lambda-function/aws"
   version                        = "~> 3.0.0" # Only pull patch/fix releases
-  function_name                  = var.function_name
-  description                    = var.description
-  filename                       = var.filename
+  #function_name                  = var.function_name
+  #description                    = var.description
+  #filename                       = var.filename
   handler                        = var.handler
   publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
   runtime                        = var.runtime
   timeout                        = var.timeout
   tags                           = var.tags
-  vpc_config                     = var.vpc_config
+  #vpc_config                     = var.vpc_config
   layers                         = var.layers
   resource_allocation            = var.resource_allocation
 
@@ -55,7 +55,7 @@ module "lambda_cloudwatch_trigger" {
   version = "~> 4.0.0"
   
   # Enablement
-  enable              = var.architecture.cloudwatch_trigger
+  enable              = var.enable && lookup(var.architecture, "cloudwatch_trigger", false)
 
   lambda_function_arn = module.lambda.arn
   schedule_expression = var.schedule_expression
@@ -69,7 +69,7 @@ module "lambda_s3_trigger" {
   version = "~> 1.0.0"
 
   # Enablement
-  enable              = var.architecture.s3_trigger
+  enable              = var.enable && lookup(var.architecture, "s3_trigger", false)
 
   bucket_id           = var.bucket_id
   bucket_arn          = var.bucket_arn
@@ -81,7 +81,7 @@ module "lambda_ddb_trigger" {
   version = "~> 2.0.0"
 
   # Enablement
-  enable              = var.architecture.ddb_trigger
+  enable              = var.enable && lookup(var.architecture, "ddb_trigger", false)
 
   lambda_function_arn = module.lambda.arn
   lambda_role_name    = module.lambda.role_name

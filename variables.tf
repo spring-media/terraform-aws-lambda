@@ -1,9 +1,4 @@
 ## optional vars for RV modules should default but be exposed
-variable "resource_allocation" {
-  type = string
-  description = "(optional) describe your variable"
-  default = "low"
-}
 variable "enable_newrelic" {
   type = bool
   description = "(optional) describe your variable"
@@ -14,16 +9,14 @@ variable "enable_newrelic" {
 ## Enablement and Architecture Toggles
 ###
 variable architecture {
-  description = "Triggers are not required. Chose which trigger, if any, to use with lambda.  If one is true, all others must be false."
+  description = "Triggers are not required. Chose one trigger, if any, to use with lambda.  If one is true, all others must be false."
   type = object({
-    no_trigger                     = bool
     cloudwatch_trigger             = bool
     s3_trigger                     = bool
     ddb_trigger                    = bool
   })
 
   default = {
-    no_trigger                     = true
     cloudwatch_trigger             = false
     s3_trigger                     = false
     ddb_trigger                    = false
