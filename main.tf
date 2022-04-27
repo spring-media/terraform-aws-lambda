@@ -1,24 +1,18 @@
-  module "lambda" {
+module "lambda" {
   source                         = "app.terraform.io/bankrate/lambda-function/aws"
-  version                        = "~> 3.0.0" # Only pull patch/fix releases
-  #function_name                  = var.function_name
-  #description                    = var.description
-  #filename                       = var.filename
+  version                        = "~> 4.0.0"
   handler                        = var.handler
   publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
   runtime                        = var.runtime
   timeout                        = var.timeout
   tags                           = var.tags
-  #vpc_config                     = var.vpc_config
   layers                         = var.layers
   resource_allocation            = var.resource_allocation
-
-  # bonus points
-  #create_in_vpc     = var.create_in_vpc
-  #create_default_sg = var.create_default_sg
-  #enable_newrelic = var.enable_newrelic
-  #security_groups = concat(var.security_groups, tolist(aws_security_group.lambda_egress.id))
+  vpc_tag                        = var.vpc_tag_key_override
+  name                           = "dummyvar"
+  team_name                      = "dummyvar"
+  environment                    = "dummyvar"
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -31,6 +25,9 @@ data "aws_iam_policy_document" "assume_role_policy" {
     }
   }
 }
+
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "lambda" {
   name               = var.function_name
@@ -60,7 +57,7 @@ module "lambda_cloudwatch_trigger" {
   lambda_function_arn = module.lambda.arn
   schedule_expression = var.schedule_expression
   environment         = var.environment
-  project             = var.project_name
+  project             = var.project
   owner               = var.owner
 }
 
@@ -71,12 +68,11 @@ module "lambda_s3_trigger" {
   # Enablement
   enable              = var.enable && lookup(var.architecture, "s3_trigger", false)
 
-  bucket_id           = var.bucket_id
-  bucket_arn          = var.bucket_arn
+  bucket_name           = var.bucket_id
   lambda_function_arn = module.lambda.arn
 }
 
-module "lambda_ddb_trigger" {
+/*module "lambda_ddb_trigger" {
   source  = "app.terraform.io/bankrate/lambda-event-source/aws"
   version = "~> 2.0.0"
 
@@ -88,9 +84,9 @@ module "lambda_ddb_trigger" {
   event_source_arn    = var.event_source_arn
   table_name          = var.table_name
 }
-
+*/
 resource "aws_cloudwatch_log_group" "lambda" {
-  name              = "/aws/lambda/${module.lambda.function_name}"
+  name              = "/aws/lambda/${module.lambda.name}"
   retention_in_days =  var.log_retention_in_days
 }
 
@@ -129,14 +125,14 @@ data "aws_iam_policy_document" "ssm_policy_document" {
 
 resource "aws_iam_policy" "ssm_policy" {
   count       = length(var.ssm_parameter_names)
-  name        = "${module.lambda.function_name}-ssm-${count.index}"
-  description = "Provides minimum Parameter Store permissions for ${module.lambda.function_name}."
+  name        = "${module.lambda.name}-ssm-${count.index}"
+  description = "Provides minimum Parameter Store permissions for ${module.lambda.name}."
   policy      = data.aws_iam_policy_document.ssm_policy_document[count.index].json
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_policy_attachment" {
   count      = length(var.ssm_parameter_names)
-  role       = module.lambda.role_name
+  role       = module.lambda.iam_role_name
   policy_arn = aws_iam_policy.ssm_policy[count.index].arn
 }
 
@@ -154,14 +150,14 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
 resource "aws_iam_policy" "kms_policy" {
   count       = var.kms_key_arn != "" ? 1 : 0
-  name        = "${module.lambda.function_name}-kms"
-  description = "Provides minimum KMS permissions for ${module.lambda.function_name}."
+  name        = "${module.lambda.name}-kms"
+  description = "Provides minimum KMS permissions for ${module.lambda.name}."
   policy      = data.aws_iam_policy_document.kms_policy_document.json
 }
 
 resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
   count      = var.kms_key_arn != "" ? 1 : 0
-  role       = module.lambda.role_name
+  role       = module.lambda.iam_role_name
   policy_arn = aws_iam_policy.kms_policy[count.index].arn
 } 
 

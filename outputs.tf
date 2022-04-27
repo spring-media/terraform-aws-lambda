@@ -1,4 +1,5 @@
-output "arn" {
+
+/*output "arn" {
   description = "The Amazon Resource Name (ARN) identifying your Lambda Function."
   value       = module.lambda.arn
 }
@@ -18,3 +19,4 @@ output "role_name" {
   value       = module.lambda.role_name
 }
 
+*/

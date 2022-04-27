@@ -8,6 +8,11 @@ variable "enable_newrelic" {
 #
 ## Enablement and Architecture Toggles
 ###
+variable "enable" {
+  description = "is a trigger enables true or false"
+  type = bool
+  default = true
+}
 variable architecture {
   description = "Triggers are not required. Chose one trigger, if any, to use with lambda.  If one is true, all others must be false."
   type = object({
@@ -61,7 +66,11 @@ variable "resource_allocation" {
   default = "low"
 }
 
-
+variable "vpc_tag_key_override" {
+  description = "override of vpc tag"
+  type = string
+  default = "PrimaryVPC"
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.
@@ -73,11 +82,15 @@ variable "description" {
 }
 
 variable "environment" {
-  description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
-  type        = map(map(string))
-  default     = {}
+  description = "Environment for the resouces"
+  type        = string
 }
 
+variable "env_vars" {
+  description = "Environment variables in map(map(string))"
+  type = map(map(string))
+  default = {}
+}
 variable "schedule_expression" {
   description = "value"
   type = string
