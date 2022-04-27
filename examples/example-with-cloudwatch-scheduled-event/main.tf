@@ -19,13 +19,13 @@ module "lambda" {
   environment   = "qa"
   team_name     = "example"
   owner         = "example"
-  schedule_expression = "rate(1 minute)"
+
   architecture = {
     cloudwatch_trigger             = true
     s3_trigger                     = false
     ddb_trigger                    = false
   }
-
+  schedule_expression = "rate(1 minute)"
 
   tags = {
     key = "value"

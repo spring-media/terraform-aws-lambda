@@ -10,9 +10,9 @@ module "lambda" {
   layers                         = var.layers
   resource_allocation            = var.resource_allocation
   vpc_tag                        = var.vpc_tag_key_override
-  name                           = "dummyvar"
-  team_name                      = "dummyvar"
-  environment                    = "dummyvar"
+  name                           = ""
+  team_name                      = ""
+  environment                    = "qa"
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
@@ -72,19 +72,19 @@ module "lambda_s3_trigger" {
   lambda_function_arn = module.lambda.arn
 }
 
-/*module "lambda_ddb_trigger" {
+module "lambda_ddb_trigger" {
   source  = "app.terraform.io/bankrate/lambda-event-source/aws"
-  version = "~> 2.0.0"
+  version = "2.3.0"
 
   # Enablement
   enable              = var.enable && lookup(var.architecture, "ddb_trigger", false)
 
   lambda_function_arn = module.lambda.arn
-  lambda_role_name    = module.lambda.role_name
+  lambda_role_name    = module.lambda.iam_role_name
   event_source_arn    = var.event_source_arn
-  table_name          = var.table_name
+  event_source_type   = "dynamodb"
 }
-*/
+
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${module.lambda.name}"
   retention_in_days =  var.log_retention_in_days

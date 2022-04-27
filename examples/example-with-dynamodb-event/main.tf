@@ -1,25 +1,33 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "us-east-1"
+  version = "4.11.0"
 }
+
+data "aws_region" "current" {}
+data "aws_caller_identity" "current"{}
 
 module "lambda" {
   source        = "../../"
+  description   = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
   filename      = "${path.module}/test_function.zip"
-  function_name = "my-function"
-  handler       = "my-handler"
+  function_name = "tf-example-go-basic"
+  handler       = "example-lambda-func"
+  runtime       = "go1.x"
+  service       = "example"
+  project       = "example"
+  environment   = var.workspace
+  team_name     = "example"
+  owner         = "example"
 
-  event = {
-    type                    = "dynamodb"
-    stream_event_source_arn = "arn:aws:dynamodb:eu-west-1:647379381847:table/some-table/stream/some-identifier"
-    table_name              = "some-table"
+  architecture = {
+    cloudwatch_trigger             = false
+    s3_trigger                     = false
+    ddb_trigger                    = true
   }
-
-  # optionally configure Parameter Store access with decryption
-  ssm_parameter_names = ["some/config/root/*"]
-  kms_key_arn         = "arn:aws:kms:eu-west-1:647379381847:key/f79f2b-04684-4ad9-f9de8a-79d72f"
-
-  # optionally create a log subscription for streaming log events
-  logfilter_destination_arn = "arn:aws:lambda:eu-west-1:647379381847:function:cloudwatch_logs_to_es_production"
+  name           = var.name
+  project_name   = var.project
+  hash_key       = "id"
+  stream_enabled = true
 
   tags = {
     key = "value"
