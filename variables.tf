@@ -37,7 +37,7 @@ variable "filename" {
   description = "The path to the function's deployment package within the local filesystem."
 }
 
-variable "function_name" {
+variable "name" {
   description = "A unique name for your Lambda Function."
 }
 
