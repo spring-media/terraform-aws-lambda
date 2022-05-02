@@ -10,7 +10,7 @@ module "lambda" {
   layers                         = var.layers
   resource_allocation            = var.resource_allocation
   vpc_tag                        = var.vpc_tag_key_override
-  name                           = var.function_name
+  name                           = var.name
   team_name                      = var.team_name
   environment                    = var.environment
 
@@ -31,7 +31,7 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "lambda" {
-  name               = var.function_name
+  name               = var.name
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
