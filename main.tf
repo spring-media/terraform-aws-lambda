@@ -1,59 +1,86 @@
 module "lambda" {
-  source                         = "./modules/lambda"
-  description                    = var.description
-  environment                    = var.environment
-  filename                       = var.filename
-  function_name                  = var.function_name
+  source                         = "app.terraform.io/bankrate/lambda-function/aws"
+  version                        = "~> 4.0.0"
   handler                        = var.handler
-  memory_size                    = var.memory_size
   publish                        = var.publish
   reserved_concurrent_executions = var.reserved_concurrent_executions
   runtime                        = var.runtime
   timeout                        = var.timeout
   tags                           = var.tags
-  vpc_config                     = var.vpc_config
   layers                         = var.layers
+  resource_allocation            = var.resource_allocation
+  vpc_tag                        = var.vpc_tag_key_override
+  name                           = var.name
+  team_name                      = var.team_name
+  environment                    = var.environment
+
 }
 
-module "event-cloudwatch-scheduled-event" {
-  source = "./modules/event/cloudwatch-scheduled-event"
-  enable = lookup(var.event, "type", "") == "cloudwatch-scheduled-event" ? true : false
+data "aws_iam_policy_document" "assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_role" "lambda" {
+  name               = var.name
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+module "lambda_cloudwatch_trigger" {
+  source  = "app.terraform.io/bankrate/lambda-cloudwatch-trigger/aws"
+  version = "~> 4.0.0"
+  
+  # Enablement
+  enable              = var.enable && lookup(var.architecture, "cloudwatch_trigger", false)
 
   lambda_function_arn = module.lambda.arn
-  schedule_expression = lookup(var.event, "schedule_expression", "")
+  schedule_expression = var.schedule_expression
+  environment         = var.environment
+  project             = var.project
+  owner               = var.owner
 }
 
-module "event-dynamodb" {
-  source = "./modules/event/dynamodb"
-  enable = lookup(var.event, "type", "") == "dynamodb" ? true : false
+module "lambda_s3_trigger" {
+  source = "app.terraform.io/bankrate/lambda-s3-trigger/aws"
+  version = "~> 1.0.0"
 
-  function_name           = module.lambda.function_name
-  iam_role_name           = module.lambda.role_name
-  stream_event_source_arn = lookup(var.event, "stream_event_source_arn", "")
-  table_name              = lookup(var.event, "table_name", "")
+  # Enablement
+  enable              = var.enable && lookup(var.architecture, "s3_trigger", false)
+
+  bucket_name           = var.bucket_id
+  lambda_function_arn = module.lambda.arn
 }
 
-module "event-sns" {
-  source = "./modules/event/sns"
-  enable = lookup(var.event, "type", "") == "sns" ? true : false
+module "lambda_ddb_trigger" {
+  source  = "app.terraform.io/bankrate/lambda-event-source/aws"
+  version = "2.3.0"
 
-  endpoint      = module.lambda.arn
-  function_name = module.lambda.function_name
-  topic_arn     = lookup(var.event, "topic_arn", "")
-}
-
-module "event-s3" {
-  source = "./modules/event/s3"
-  enable = lookup(var.event, "type", "") == "s3" ? true : false
+  # Enablement
+  enable              = var.enable && lookup(var.architecture, "ddb_trigger", false)
 
   lambda_function_arn = module.lambda.arn
-  s3_bucket_arn       = lookup(var.event, "s3_bucket_arn", "")
-  s3_bucket_id        = lookup(var.event, "s3_bucket_id", "")
+  lambda_role_name    = module.lambda.iam_role_name
+  event_source_arn    = var.event_source_arn
+  event_source_type   = "dynamodb"
 }
 
 resource "aws_cloudwatch_log_group" "lambda" {
-  name              = "/aws/lambda/${module.lambda.function_name}"
-  retention_in_days = var.log_retention_in_days
+  name              = "/aws/lambda/${module.lambda.name}"
+  retention_in_days =  var.log_retention_in_days
 }
 
 resource "aws_lambda_permission" "cloudwatch_logs" {
@@ -74,12 +101,6 @@ resource "aws_cloudwatch_log_subscription_filter" "cloudwatch_logs_to_es" {
   distribution    = "ByLogStream"
 }
 
-data "aws_region" "current" {
-}
-
-data "aws_caller_identity" "current" {
-}
-
 data "aws_iam_policy_document" "ssm_policy_document" {
   count = length(var.ssm_parameter_names)
 
@@ -97,14 +118,14 @@ data "aws_iam_policy_document" "ssm_policy_document" {
 
 resource "aws_iam_policy" "ssm_policy" {
   count       = length(var.ssm_parameter_names)
-  name        = "${module.lambda.function_name}-ssm-${count.index}"
-  description = "Provides minimum Parameter Store permissions for ${module.lambda.function_name}."
+  name        = "${module.lambda.name}-ssm-${count.index}"
+  description = "Provides minimum Parameter Store permissions for ${module.lambda.name}."
   policy      = data.aws_iam_policy_document.ssm_policy_document[count.index].json
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_policy_attachment" {
   count      = length(var.ssm_parameter_names)
-  role       = module.lambda.role_name
+  role       = module.lambda.iam_role_name
   policy_arn = aws_iam_policy.ssm_policy[count.index].arn
 }
 
@@ -122,14 +143,14 @@ data "aws_iam_policy_document" "kms_policy_document" {
 
 resource "aws_iam_policy" "kms_policy" {
   count       = var.kms_key_arn != "" ? 1 : 0
-  name        = "${module.lambda.function_name}-kms"
-  description = "Provides minimum KMS permissions for ${module.lambda.function_name}."
+  name        = "${module.lambda.name}-kms"
+  description = "Provides minimum KMS permissions for ${module.lambda.name}."
   policy      = data.aws_iam_policy_document.kms_policy_document.json
 }
 
 resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
   count      = var.kms_key_arn != "" ? 1 : 0
-  role       = module.lambda.role_name
+  role       = module.lambda.iam_role_name
   policy_arn = aws_iam_policy.kms_policy[count.index].arn
-}
+} 
 

@@ -1,3 +1,33 @@
+## optional vars for RV modules should default but be exposed
+variable "enable_newrelic" {
+  type = bool
+  description = "(optional) describe your variable"
+  default = false
+}
+
+#
+## Enablement and Architecture Toggles
+###
+variable "enable" {
+  description = "is a trigger enables true or false"
+  type = bool
+  default = true
+}
+variable architecture {
+  description = "Triggers are not required. Chose one trigger, if any, to use with lambda.  If one is true, all others must be false."
+  type = object({
+    cloudwatch_trigger             = bool
+    s3_trigger                     = bool
+    ddb_trigger                    = bool
+  })
+
+  default = {
+    cloudwatch_trigger             = false
+    s3_trigger                     = false
+    ddb_trigger                    = false
+  }
+}
+
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
 # You must provide a value for each of these parameters.
@@ -7,7 +37,7 @@ variable "filename" {
   description = "The path to the function's deployment package within the local filesystem."
 }
 
-variable "function_name" {
+variable "name" {
   description = "A unique name for your Lambda Function."
 }
 
@@ -15,6 +45,32 @@ variable "handler" {
   description = "The function entrypoint in your code."
 }
 
+variable "project" {
+  description = "Name of the project this falls under."
+}
+
+variable "service" {
+  description = "Name of the service this is used in."
+}
+
+variable "owner" {
+  description = "Name of the owner or vertical this belongs to."
+}
+
+variable "team_name" {
+  description = "Name of the team this belongs to."
+}
+
+variable "resource_allocation" {
+  description = "Name of the project this falls under."
+  default = "low"
+}
+
+variable "vpc_tag_key_override" {
+  description = "override of vpc tag"
+  type = string
+  default = "PrimaryVPC"
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.
@@ -26,15 +82,43 @@ variable "description" {
 }
 
 variable "environment" {
-  description = "Environment (e.g. env variables) configuration for the Lambda function enable you to dynamically pass settings to your function code and libraries"
-  type        = map(map(string))
-  default     = {}
+  description = "Environment for the resouces"
+  type        = string
 }
 
-variable "event" {
-  description = "Event source configuration which triggers the Lambda function. Supported events: cloudwatch-scheduled-event, dynamodb, s3, sns"
-  type        = map(string)
-  default     = {}
+variable "env_vars" {
+  description = "Environment variables in map(map(string))"
+  type = map(map(string))
+  default = {}
+}
+variable "schedule_expression" {
+  description = "value"
+  type = string
+  default = "rate(1 minute)"
+}
+
+variable "bucket_arn" {
+  description = "value"
+  type = string
+  default = ""
+}
+
+variable "bucket_id" {
+  description = "value"
+  type = string
+  default = ""
+}
+
+variable "event_source_arn" {
+  description = "value"
+  type = string
+  default = ""
+}
+
+variable "table_name" {
+  description = "value"
+  type = string
+  default = ""
 }
 
 variable "kms_key_arn" {
@@ -88,10 +172,21 @@ variable "timeout" {
   default     = 3
 }
 
-variable "vpc_config" {
-  description = "Provide this to allow your function to access your VPC (if both 'subnet_ids' and 'security_group_ids' are empty then vpc_config is considered to be empty or unset, see https://docs.aws.amazon.com/lambda/latest/dg/vpc.html for details)."
-  type        = map(list(string))
-  default     = {}
+variable "create_in_vpc" {
+  description = "By default this is set to true. If you don't want to create the lambda in a VPC then this should be set to false"
+  type = bool
+  default = true
+}
+
+variable "create_default_sg" {
+  description = "By default creates a security group that's unique to your lambda, meaning that every lambda you create with this module will use its own set of ENIs"
+  type = bool
+  default = false
+}
+variable "security_groups" {
+  description = "security groups"
+  type = list(string)
+  default = []
 }
 
 variable "layers" {

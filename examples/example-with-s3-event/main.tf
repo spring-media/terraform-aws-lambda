@@ -1,6 +1,10 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "us-east-1"
+  version = "4.11.0"
 }
+
+data "aws_region" "current" {}
+data "aws_caller_identity" "current"{}
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = "bucketname"
@@ -13,26 +17,30 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 
 module "lambda" {
   source        = "../../"
-  description   = "Example AWS Lambda using go with S3 trigger"
+  description   = "Example AWS Lambda using go with s3 event trigger"
   filename      = "${path.module}/test_function.zip"
-  function_name = "tf-example-go-s3"
+  function_name = "tf-example-go-basic"
   handler       = "example-lambda-func"
   runtime       = "go1.x"
+  service       = "example"
+  project       = "example"
+  environment   = "qa"
+  team_name     = "example"
+  owner         = "example"
 
-  event = {
-    type          = "s3"
-    s3_bucket_arn = "arn:aws:s3:::bucketname"
-    s3_bucket_id  = "bucketname"
+  architecture = {
+    cloudwatch_trigger             = false
+    s3_trigger                     = true
+    ddb_trigger                    = false
   }
+  bucket_arn = "arn:aws:s3:::bucketname"
+  bucket_id  = "bucketname"
 
   tags = {
     key = "value"
   }
 
-  environment = {
-    variables = {
-      key = "value"
-    }
-  }
+
+
 }
 
