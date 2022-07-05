@@ -27,7 +27,16 @@ variable architecture {
     ddb_trigger                    = false
   }
 }
-
+variable "authorization_type" {
+  type = string
+  description = "Type of authorization used by the function URL"
+  default = "AWS_IAM"
+}
+variable "qualifier" {
+  type = string
+  description = "Alias name or $LATEST"
+  default = ""
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
 # You must provide a value for each of these parameters.
