@@ -4,10 +4,6 @@ output "arn" {
   value       = module.lambda.arn
 }
 
-output "function_url" {
-  description = "the HTTP URL endpoint for the function"
-  value = aws_lambda_function_url.lambda_url.function_url
-}
 /*
 output "function_name" {
   description = "The unique name of your Lambda Function."

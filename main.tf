@@ -156,8 +156,8 @@ resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
 
 
 resource "aws_lambda_function_url" "lambda_url" {
-  count              = var.enable ? 1 : 0
+  count              = var.enable_functionurl ? 1 : 0
   function_name      = module.lambda.arn
   qualifier          = var.qualifier
-  authorization_type = var.authorization_type
+  authorization_type = "AWS_IAM"
 }

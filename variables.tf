@@ -26,16 +26,18 @@ variable architecture {
     s3_trigger                     = false
     ddb_trigger                    = false
   }
-}
-variable "authorization_type" {
-  type = string
-  description = "Type of authorization used by the function URL"
-  default = "AWS_IAM"
+
 }
 variable "qualifier" {
   type = string
   description = "Alias name or $LATEST"
-  default = ""
+  default = "$LATEST"
+}
+
+variable "enable_functionurl" {
+  type = bool
+  description = "trigger to create lambda function url"
+  default = false
 }
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
