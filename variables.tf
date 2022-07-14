@@ -27,6 +27,17 @@ variable architecture {
     ddb_trigger                    = false
   }
 }
+variable "qualifier" {
+  type = string
+  description = "Alias name or $LATEST"
+  default = "$LATEST"
+}
+
+variable "enable_functionurl" {
+  type = bool
+  description = "trigger to create lambda function url"
+  default = false
+}
 
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
