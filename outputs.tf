@@ -5,7 +5,7 @@ output "arn" {
 }
 output "aws_lambda_function_url" {
   description = "The unique url to invoke your lambda function"
-  value       = var.enable_functionurl ? aws_lambda_function_url.lambda_url[0].function_url : ""
+  value       = var.enable && lookup(var.architecture, "function_url", false) ? aws_lambda_function_url.lambda_url[0].function_url : null
 }
 /*
 output "function_name" {

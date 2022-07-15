@@ -19,12 +19,14 @@ variable architecture {
     cloudwatch_trigger = bool
     s3_trigger         = bool
     ddb_trigger        = bool
+    function_url = bool
   })
 
   default = {
     cloudwatch_trigger = false
     s3_trigger         = false
     ddb_trigger        = false
+    function_url = false
   }
 }
 variable "qualifier" {
@@ -33,11 +35,11 @@ variable "qualifier" {
   default     = "$LATEST"
 }
 
-variable "enable_functionurl" {
-  type        = bool
-  description = "trigger to create lambda function url"
-  default     = false
-}
+# variable "enable_functionurl" {
+#   type        = bool
+#   description = "trigger to create lambda function url"
+#   default     = false
+# }
 
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
