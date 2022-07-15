@@ -3,6 +3,10 @@ output "arn" {
   description = "The Amazon Resource Name (ARN) identifying your Lambda Function."
   value       = module.lambda.arn
 }
+output "aws_lambda_function_url" {
+  description = "The unique url to invoke your lambda function"
+  value       = var.enable_functionurl ? aws_lambda_function_url.lambda_url[0].function_url : ""
+}
 /*
 output "function_name" {
   description = "The unique name of your Lambda Function."
