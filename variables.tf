@@ -1,8 +1,8 @@
 ## optional vars for RV modules should default but be exposed
 variable "enable_newrelic" {
-  type = bool
+  type        = bool
   description = "(optional) describe your variable"
-  default = false
+  default     = false
 }
 
 #
@@ -10,33 +10,33 @@ variable "enable_newrelic" {
 ###
 variable "enable" {
   description = "is a trigger enables true or false"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 variable architecture {
   description = "Triggers are not required. Chose one trigger, if any, to use with lambda.  If one is true, all others must be false."
   type = object({
-    cloudwatch_trigger             = bool
-    s3_trigger                     = bool
-    ddb_trigger                    = bool
+    cloudwatch_trigger = bool
+    s3_trigger         = bool
+    ddb_trigger        = bool
   })
 
   default = {
-    cloudwatch_trigger             = false
-    s3_trigger                     = false
-    ddb_trigger                    = false
+    cloudwatch_trigger = false
+    s3_trigger         = false
+    ddb_trigger        = false
   }
 }
 variable "qualifier" {
-  type = string
+  type        = string
   description = "Alias name or $LATEST"
-  default = "$LATEST"
+  default     = "$LATEST"
 }
 
 variable "enable_functionurl" {
-  type = bool
+  type        = bool
   description = "trigger to create lambda function url"
-  default = false
+  default     = false
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -74,13 +74,13 @@ variable "team_name" {
 
 variable "resource_allocation" {
   description = "Name of the project this falls under."
-  default = "low"
+  default     = "low"
 }
 
 variable "vpc_tag_key_override" {
   description = "override of vpc tag"
-  type = string
-  default = "PrimaryVPC"
+  type        = string
+  default     = "PrimaryVPC"
 }
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
@@ -99,37 +99,37 @@ variable "environment" {
 
 variable "env_vars" {
   description = "Environment variables in map(map(string))"
-  type = map(map(string))
-  default = {}
+  type        = map(map(string))
+  default     = {}
 }
 variable "schedule_expression" {
   description = "value"
-  type = string
-  default = "rate(1 minute)"
+  type        = string
+  default     = "rate(1 minute)"
 }
 
 variable "bucket_arn" {
   description = "value"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "bucket_id" {
   description = "value"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "event_source_arn" {
   description = "value"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "table_name" {
   description = "value"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "kms_key_arn" {
@@ -185,19 +185,19 @@ variable "timeout" {
 
 variable "create_in_vpc" {
   description = "By default this is set to true. If you don't want to create the lambda in a VPC then this should be set to false"
-  type = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "create_default_sg" {
   description = "By default creates a security group that's unique to your lambda, meaning that every lambda you create with this module will use its own set of ENIs"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 variable "security_groups" {
   description = "security groups"
-  type = list(string)
-  default = []
+  type        = list(string)
+  default     = []
 }
 
 variable "layers" {

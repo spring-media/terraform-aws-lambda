@@ -43,9 +43,9 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_logs" {
 module "lambda_cloudwatch_trigger" {
   source  = "app.terraform.io/bankrate/lambda-cloudwatch-trigger/aws"
   version = "~> 4.0.0"
-  
+
   # Enablement
-  enable              = var.enable && lookup(var.architecture, "cloudwatch_trigger", false)
+  enable = var.enable && lookup(var.architecture, "cloudwatch_trigger", false)
 
   lambda_function_arn = module.lambda.arn
   schedule_expression = var.schedule_expression
@@ -55,13 +55,13 @@ module "lambda_cloudwatch_trigger" {
 }
 
 module "lambda_s3_trigger" {
-  source = "app.terraform.io/bankrate/lambda-s3-trigger/aws"
+  source  = "app.terraform.io/bankrate/lambda-s3-trigger/aws"
   version = "~> 1.0.0"
 
   # Enablement
-  enable              = var.enable && lookup(var.architecture, "s3_trigger", false)
+  enable = var.enable && lookup(var.architecture, "s3_trigger", false)
 
-  bucket_name           = var.bucket_id
+  bucket_name         = var.bucket_id
   lambda_function_arn = module.lambda.arn
 }
 
@@ -70,7 +70,7 @@ module "lambda_ddb_trigger" {
   version = "2.3.0"
 
   # Enablement
-  enable              = var.enable && lookup(var.architecture, "ddb_trigger", false)
+  enable = var.enable && lookup(var.architecture, "ddb_trigger", false)
 
   lambda_function_arn = module.lambda.arn
   lambda_role_name    = module.lambda.iam_role_name
@@ -80,7 +80,7 @@ module "lambda_ddb_trigger" {
 
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${module.lambda.name}"
-  retention_in_days =  var.log_retention_in_days
+  retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_lambda_permission" "cloudwatch_logs" {
@@ -152,7 +152,7 @@ resource "aws_iam_role_policy_attachment" "kms_policy_attachment" {
   count      = var.kms_key_arn != "" ? 1 : 0
   role       = module.lambda.iam_role_name
   policy_arn = aws_iam_policy.kms_policy[count.index].arn
-} 
+}
 
 resource "aws_lambda_function_url" "lambda_url" {
   count              = var.enable_functionurl ? 1 : 0
