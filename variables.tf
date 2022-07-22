@@ -29,11 +29,6 @@ variable architecture {
     function_url       = false
   }
 }
-variable "qualifier" {
-  type        = string
-  description = "Alias name or $LATEST"
-  default     = "$LATEST"
-}
 
 # ---------------------------------------------------------------------------------------------------------------------
 # REQUIRED PARAMETERS
