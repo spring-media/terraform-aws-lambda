@@ -196,3 +196,9 @@ variable "layers" {
   type        = list(string)
   default     = []
 }
+
+variable "authorization_type" {
+  description = "The type of authentication that the function URL uses. Defaults to AWS_IAM which restricts access to authenticated users. Use NONE to allow public unauthenticated users invoke your lambda"
+  type = string
+  default = "AWS_IAM"
+}
