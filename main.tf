@@ -67,7 +67,7 @@ module "lambda_s3_trigger" {
 
 module "lambda_event_source" {
   source  = "app.terraform.io/RVStandard/lambda-event-source/aws"
-  version = "2.3.0"
+  version = "~> 2.0"
 
   # Enablement
   enable = var.enable && (lookup(var.architecture, "ddb_trigger", false) || lookup(var.architecture, "sqs_trigger", false) || lookup(var.architecture, "kinesis_trigger", false))

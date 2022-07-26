@@ -41,7 +41,7 @@ variable "event_trigger_type" {
 
   validation {
     condition     = contains(["dynamodb", "sqs", "kinesis"], var.event_trigger_type)
-    error_message = "Must be a dynamodb, sqs and or a kinesis event"
+    error_message = "Must be a dynamodb, sqs and or a kinesis event."
   }
 }
 
