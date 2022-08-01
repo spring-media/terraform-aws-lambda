@@ -204,6 +204,6 @@ variable "authorization_type" {
   
   validation {
     condition           = contains(["AWS_IAM", "NONE"], var.authorization_type)
-    error_message = "Authorization type must be either `AWS_IAM` || `NONE`"
+    error_message = "Authorization type must be either `AWS_IAM` || `NONE`."
   }
 }
