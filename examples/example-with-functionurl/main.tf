@@ -9,7 +9,7 @@ data "aws_caller_identity" "current" {}
 
 module "lambda" {
   source      = "../../"
-  description = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
+  description = "Example AWS Lambda using go with functionurl"
   filename    = "${path.module}/test_function.zip"
   name        = "tf-example-go-basic"
   handler     = "example-lambda-func"
@@ -21,14 +21,9 @@ module "lambda" {
   owner       = "example"
 
   architecture = {
-    cloudwatch_trigger = true
+    cloudwatch_trigger = false
     s3_trigger         = false
     ddb_trigger        = false
-    function_url       = false
-  }
-  schedule_expression = "rate(1 minute)"
-
-  tags = {
-    key = "value"
+    function_url       = true
   }
 }
