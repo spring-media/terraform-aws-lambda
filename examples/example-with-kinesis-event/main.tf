@@ -10,12 +10,12 @@ module "lambda" {
   source        = "../../"
   description   = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
   filename      = "${path.module}/test_function.zip"
-  function_name = "tf-example-go-basic"
+  name          = "tf-example-go-basic"
   handler       = "example-lambda-func"
   runtime       = "go1.x"
   service       = "example"
   project       = "example"
-  environment   = var.workspace
+  environment   = "qa"
   team_name     = "example"
   owner         = "example"
 
@@ -25,9 +25,8 @@ module "lambda" {
     ddb_trigger                    = false
     sqs_trigger                    = false
     kinesis_trigger                = true
+    function_url                   = false
   }
-  name           = var.name
-  project_name   = var.project
 
   tags = {
     key = "value"

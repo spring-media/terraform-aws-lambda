@@ -33,6 +33,8 @@ module "lambda" {
     s3_trigger         = true
     ddb_trigger        = false
     function_url       = false
+    kinesis_trigger    = false
+    sqs_trigger        = false
   }
   bucket_arn = "arn:aws:s3:::bucketname"
   bucket_id  = "bucketname"

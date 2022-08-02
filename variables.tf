@@ -35,7 +35,7 @@ variable architecture {
 }
 
 variable "event_trigger_type" {
-  default     = null
+  default     = "dynamodb"
   description = ""
   type        = string
 

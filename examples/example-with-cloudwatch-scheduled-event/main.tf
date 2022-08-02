@@ -25,6 +25,8 @@ module "lambda" {
     s3_trigger         = false
     ddb_trigger        = false
     function_url       = false
+    kinesis_trigger    = false
+    sqs_trigger        = false
   }
   schedule_expression = "rate(1 minute)"
 
