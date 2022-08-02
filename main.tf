@@ -65,17 +65,17 @@ module "lambda_s3_trigger" {
   lambda_function_arn = module.lambda.arn
 }
 
-module "lambda_ddb_trigger" {
-  source  = "app.terraform.io/bankrate/lambda-event-source/aws"
+module "lambda_event_source" {
+  source  = "app.terraform.io/RVStandard/lambda-event-source/aws"
   version = "2.3.0"
 
   # Enablement
-  enable = var.enable && lookup(var.architecture, "ddb_trigger", false)
+  enable = var.enable && (lookup(var.architecture, "ddb_trigger", false) || lookup(var.architecture, "sqs_trigger", false) || lookup(var.architecture, "kinesis_trigger", false))
 
   lambda_function_arn = module.lambda.arn
   lambda_role_name    = module.lambda.iam_role_name
   event_source_arn    = var.event_source_arn
-  event_source_type   = "dynamodb"
+  event_source_type   = var.event_trigger_type
 }
 
 resource "aws_cloudwatch_log_group" "lambda" {

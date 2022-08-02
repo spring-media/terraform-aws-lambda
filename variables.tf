@@ -20,6 +20,8 @@ variable architecture {
     s3_trigger         = bool
     ddb_trigger        = bool
     function_url       = bool
+    sqs_trigger        = bool
+    kinesis_trigger    = bool
   })
 
   default = {
@@ -27,6 +29,19 @@ variable architecture {
     s3_trigger         = false
     ddb_trigger        = false
     function_url       = false
+    sqs_trigger        = false
+    kinesis_trigger    = false
+  }
+}
+
+variable "event_trigger_type" {
+  default     = null
+  description = ""
+  type        = string
+
+  validation {
+    condition     = contains(["dynamodb", "sqs", "kinesis"], var.event_trigger_type)
+    error_message = "Must be a dynamodb, sqs and or a kinesis event"
   }
 }
 
