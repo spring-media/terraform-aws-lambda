@@ -6,7 +6,6 @@ provider "aws" {
 data "aws_region" "current" {}
 data "aws_caller_identity" "current"{}
 
-
 module "lambda" {
   source        = "../../"
   description   = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
@@ -19,4 +18,19 @@ module "lambda" {
   environment   = "qa"
   team_name     = "example"
   owner         = "example"
-}       
+
+  architecture = {
+    cloudwatch_trigger             = false
+    s3_trigger                     = false
+    ddb_trigger                    = false
+    sqs_trigger                    = true
+    kinesis_trigger                = false
+    function_url                   = false
+  }
+  
+
+  tags = {
+    key = "value"
+  }
+}
+

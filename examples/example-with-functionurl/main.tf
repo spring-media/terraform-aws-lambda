@@ -25,5 +25,7 @@ module "lambda" {
     s3_trigger         = false
     ddb_trigger        = false
     function_url       = true
+    kinesis_trigger    = false
+    sqs_trigger        = false 
   }
 }
