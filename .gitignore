@@ -3,3 +3,4 @@ terraform.tfstate
 terraform.tfstate.backup
 
 bin/
+*.DS_Store

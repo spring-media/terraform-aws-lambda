@@ -66,7 +66,7 @@ module "lambda_s3_trigger" {
 }
 
 module "lambda_event_source" {
-  source  = "app.terraform.io/RVStandard/lambda-event-source/aws"
+  source  = "app.terraform.io/bankrate/lambda-event-source/aws"
   version = "~> 2.0"
 
   # Enablement
