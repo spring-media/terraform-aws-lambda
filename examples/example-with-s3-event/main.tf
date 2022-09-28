@@ -18,7 +18,6 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 module "lambda" {
   source      = "../../"
   description = "Example AWS Lambda using go with s3 event trigger"
-  filename    = "${path.module}/test_function.zip"
   name        = "tf-example-go-basic"
   handler     = "example-lambda-func"
   runtime     = "go1.x"

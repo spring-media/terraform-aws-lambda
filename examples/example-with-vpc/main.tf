@@ -25,7 +25,6 @@ resource "aws_security_group_rule" "lambda_egress" {
 module "lambda" {
   source      = "../../"
   description = "Example AWS Lambda inside a VPC using go with cloudwatch scheduled event trigger"
-  filename    = "${path.module}/test_function.zip"
   name        = "tf-example-go-basic"
   handler     = "example-lambda-func"
   runtime     = "go1.x"
