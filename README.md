@@ -54,7 +54,7 @@
 | <a name="input_env_vars"></a> [env\_vars](#input\_env\_vars) | Environment variables in map(map(string)) | `map(map(string))` | `{}` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment for the resouces | `string` | n/a | yes |
 | <a name="input_event_source_arn"></a> [event\_source\_arn](#input\_event\_source\_arn) | value | `string` | `""` | no |
-| <a name="input_filename"></a> [filename](#input\_filename) | The path to the function's deployment package within the local filesystem. | `any` | n/a | yes |
+| <a name="input_filename"></a> [filename](#input\_filename) | The path to the function's deployment package within the local filesystem. Default is an empty string to satisfy the underlying interface. | `any` | `""` | no |
 | <a name="input_handler"></a> [handler](#input\_handler) | The function entrypoint in your code. | `any` | n/a | yes |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The Amazon Resource Name (ARN) of the KMS key to decrypt AWS Systems Manager parameters. | `string` | `""` | no |
 | <a name="input_layers"></a> [layers](#input\_layers) | List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function. See [Lambda Layers](https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html) | `list(string)` | `[]` | no |

@@ -91,8 +91,8 @@ variable "vpc_tag_key_override" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "filename" {
-  description = "The path to the function's deployment package within the local filesystem."
-  default     = ""
+  description = "The path to the function's deployment package within the local filesystem. Empty string (psuedo-null) is here to satisfy the underlying interface."
+  default = ""
 }
 
 variable "description" {

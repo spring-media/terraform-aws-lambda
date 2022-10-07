@@ -13,7 +13,6 @@ module "lambda" {
   name                           = var.name
   team_name                      = var.team_name
   environment                    = var.environment
-
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
