@@ -17,19 +17,19 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Run a Terraform init
-        uses: docker://hashicorp/terraform:0.12.13
+        uses: docker://hashicorp/terraform:1.0.3
         with:
           entrypoint: terraform
           args: init
 
       - name: Run a Terraform fmt
-        uses: docker://hashicorp/terraform:0.12.13
+        uses: docker://hashicorp/terraform:1.0.3
         with:
           entrypoint: terraform
           args: fmt -check=true
 
       - name: Run a Terraform validate
-        uses: docker://hashicorp/terraform:0.12.13
+        uses: docker://hashicorp/terraform:1.0.3
         env:
           AWS_REGION: eu-west-1
         with:
