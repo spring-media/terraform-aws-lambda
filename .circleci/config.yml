@@ -1,0 +1,139 @@
+orbs:
+  terraform-orb: bankrate/terraform@1.2.0
+
+version: 2.1
+
+workflows:
+  pipeline:
+    jobs:
+      - terraform-orb/init:
+          name: example-with-cloudwatch-scheduled-event-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-with-cloudwatch-scheduled-event"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-cloudwatch-scheduled-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-cloudwatch-scheduled-event"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-cloudwatch-scheduled-event-init
+
+
+      - terraform-orb/init:
+          name: example-with-dynamo-event-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-with-dynamo-event"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-dynamo-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-dynamo-event"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-dynamo-event-init
+
+
+      - terraform-orb/init:
+          name: example-with-functionurl-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-with-functionurl"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-functionurl-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-functionurl"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-functionurl-init
+
+
+      - terraform-orb/init:
+          name: example-with-kinesis-event-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-with-kinesis-event"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-kinesis-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-kinesis-event"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-kinesis-event-init
+
+
+      - terraform-orb/init:
+          name: example-with-s3-event-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-with-s3-event"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-s3-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-s3-event"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-s3-event-init
+
+
+      - terraform-orb/init:
+          name: example-with-sqs-event-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-with-sqs-event"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-sqs-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-sqs-event"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-sqs-event-init
+
+
+      - terraform-orb/init:
+          name: example-with-vpc-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-with-vpc"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-sqs-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-vpc"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-vpc-init
