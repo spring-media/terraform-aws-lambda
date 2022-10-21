@@ -137,3 +137,22 @@ workflows:
           context: qa-terraform-modules-alternate-provider-testing
           requires:
             - example-with-vpc-init
+
+
+      - terraform-orb/init:
+          name: example-without-event-init
+          checkout: true
+          save-workspace: true
+          infrastructure_dir: "./examples/example-without-event"
+          terraform_version: 1.0.3
+          context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-without-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-without-event"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-without-event-init
