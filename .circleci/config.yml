@@ -6,11 +6,6 @@ version: 2.1
 workflows:
   pipeline:
     jobs:
-      - terraform-orb/fmt:
-          name: tf-fmt
-          infrastructure_dir: "."
-          terraform_version: 1.0.3
-
       - terraform-orb/init:
           name: example-with-cloudwatch-scheduled-event
           checkout: true
@@ -18,8 +13,7 @@ workflows:
           infrastructure_dir: "./examples/example-with-cloudwatch-scheduled-event"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
+
 
       - terraform-orb/init:
           name: example-with-dynamo-event
@@ -28,8 +22,7 @@ workflows:
           infrastructure_dir: "./examples/example-with-dynamo-event"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
+
 
       - terraform-orb/init:
           name: example-with-functionurl
@@ -38,8 +31,7 @@ workflows:
           infrastructure_dir: "./examples/example-with-functionurl"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
+
 
       - terraform-orb/init:
           name: example-with-kinesis-event
@@ -48,8 +40,7 @@ workflows:
           infrastructure_dir: "./examples/example-with-kinesis-event"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
+
 
       - terraform-orb/init:
           name: example-with-s3-event
@@ -58,8 +49,7 @@ workflows:
           infrastructure_dir: "./examples/example-with-s3-event"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
+
 
       - terraform-orb/init:
           name: example-with-sqs-event
@@ -68,8 +58,7 @@ workflows:
           infrastructure_dir: "./examples/example-with-sqs-event"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
+
 
       - terraform-orb/init:
           name: example-with-vpc
@@ -78,16 +67,14 @@ workflows:
           infrastructure_dir: "./examples/example-with-vpc"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
 
-      - terraform-orb/plan:
-          name: example-without-event
-          environment: qa
-          infrastructure_dir: "./examples/example-without-event"
-          terraform_version: 1.0.3
-          attach-workspace: true
-          save-workspace: false
-          context: qa-terraform-modules-alternate-provider-testing
-          requires:
-            - tf-fmt
+      # - terraform-orb/plan:
+      #     name: example-without-event
+      #     environment: qa
+      #     infrastructure_dir: "./examples/example-without-event"
+      #     terraform_version: 1.0.3
+      #     attach-workspace: true
+      #     save-workspace: false
+      #     context: qa-terraform-modules-alternate-provider-testing
+      #     requires:
+      #       - tf-fmt
