@@ -7,12 +7,22 @@ workflows:
   pipeline:
     jobs:
       - terraform-orb/init:
-          name: example-with-cloudwatch-scheduled-event
+          name: example-with-cloudwatch-scheduled-event-init
           checkout: true
           save-workspace: true
           infrastructure_dir: "./examples/example-with-cloudwatch-scheduled-event"
           terraform_version: 1.0.3
           context: qa-terraform-modules-alternate-provider-testing
+      - terraform-orb/plan:
+          name: example-with-cloudwatch-scheduled-event-plan
+          environment: qa
+          infrastructure_dir: "./examples/example-with-cloudwatch-scheduled-event"
+          terraform_version: 1.0.3
+          attach-workspace: true
+          save-workspace: false
+          context: qa-terraform-modules-alternate-provider-testing
+          requires:
+            - example-with-cloudwatch-scheduled-event-init
 
 
       - terraform-orb/init:
