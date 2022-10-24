@@ -10,9 +10,9 @@ data "aws_caller_identity" "current" {}
 module "lambda" {
   source      = "../../"
   description = "Example AWS Lambda using go with cloudwatch scheduled event trigger"
-  filename    = "${path.module}/test_function.zip"
   name        = "tf-example-go-basic"
   handler     = "example-lambda-func"
+  filename    = ""
   runtime     = "go1.x"
   service     = "example"
   project     = "example"

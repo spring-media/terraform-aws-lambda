@@ -17,10 +17,8 @@ output "invoke_arn" {
   description = "The ARN to be used for invoking Lambda Function from API Gateway - to be used in aws_api_gateway_integration's uri"
   value       = module.lambda.invoke_arn
 }
-
+*/
 output "role_name" {
   description = "The name of the IAM role attached to the Lambda Function."
-  value       = module.lambda.role_name
+  value       = aws_iam_role.lambda.name
 }
-
-*/

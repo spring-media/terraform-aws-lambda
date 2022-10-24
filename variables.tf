@@ -13,6 +13,7 @@ variable "enable" {
   type        = bool
   default     = true
 }
+
 variable architecture {
   description = "Triggers are not required. Chose one trigger, if any, to use with lambda.  If one is true, all others must be false."
   type = object({
@@ -49,10 +50,6 @@ variable "event_trigger_type" {
 # REQUIRED PARAMETERS
 # You must provide a value for each of these parameters.
 # ---------------------------------------------------------------------------------------------------------------------
-
-variable "filename" {
-  description = "The path to the function's deployment package within the local filesystem."
-}
 
 variable "name" {
   description = "A unique name for your Lambda Function."
@@ -92,6 +89,11 @@ variable "vpc_tag_key_override" {
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.
 # ---------------------------------------------------------------------------------------------------------------------
+
+variable "filename" {
+  description = "The path to the function's deployment package within the local filesystem. Empty string (psuedo-null) is here to satisfy the underlying interface."
+  default = ""
+}
 
 variable "description" {
   description = "Description of what your Lambda Function does."
