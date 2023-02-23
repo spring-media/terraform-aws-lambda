@@ -1,4 +1,4 @@
-## optional vars for RV modules should default but be exposed
+##   optional vars for RV modules should default but be exposed
 variable "enable_newrelic" {
   type        = bool
   description = "(optional) describe your variable"
