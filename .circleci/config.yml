@@ -12,7 +12,7 @@ workflows:
           save-workspace: true
           infrastructure_dir: "./examples/example-with-cloudwatch-scheduled-event"
           terraform_version: 1.0.3
-          context: qa-terraform-modules-alternate-provider-testing
+          context: qa-environment
       - terraform-orb/plan:
           name: example-with-cloudwatch-scheduled-event-plan
           environment: qa
@@ -20,7 +20,7 @@ workflows:
           terraform_version: 1.0.3
           attach-workspace: true
           save-workspace: false
-          context: qa-terraform-modules-alternate-provider-testing
+          context: qa-environment
           requires:
             - example-with-cloudwatch-scheduled-event-init
 
